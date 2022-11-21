@@ -8,7 +8,7 @@ const userRoutes = require('../routes/user')
 const bodyParser = require('body-parser')
 const socket = require("socket.io-client")("http://localhost:4000");
 var player = require('play-sound')(opts = {})
-const formatMessage = require('../../client/utils/formatMessage');
+const formatMessage = require('../utils/formatMessage');
 const path = require('path');
 
 app.use(bodyParser.json())

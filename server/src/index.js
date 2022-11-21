@@ -21,8 +21,8 @@ app.use(
 // app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
-    const clientPath = path.resolve('/client/src/index.html');
-    console.log(__dirname);
+    const clientPath = path.resolve('../../client/src/index.html');
+    console.log(clientPath);
     res.sendFile(clientPath)
 })
 
@@ -58,6 +58,6 @@ io.on("connection", (socket) => {
     });
 })
 
-server.listen(4000, () => {
+server.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`)
 })

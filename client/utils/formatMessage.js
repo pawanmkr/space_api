@@ -1,10 +1,10 @@
-let moment = require('moment');
+const dayjs = require('dayjs');
 
 const formatMessage = (username, text) => {
     return {
         username,
         text,
-        time: moment().format('h:mm a')
+        time: dayjs().format('h:m a')
     }
 }
 

@@ -4,7 +4,8 @@ const formatMessage = (username, text) => {
     return {
         username,
         text,
-        time: moment().format('h:mm a')
+        time: "15:13 AM"
+        //time: moment().format('h:mm a')
     }
 }
 

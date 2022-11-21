@@ -21,7 +21,7 @@ app.use(
 // app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
-    const clientPath = path.resolve('../../client/src/index.html');
+    const clientPath = path.resolve('/client/src/index.html');
     console.log(__dirname);
     res.sendFile(clientPath)
 })

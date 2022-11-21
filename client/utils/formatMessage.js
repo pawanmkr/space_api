@@ -1,11 +1,10 @@
-let moment = require('moment');
+import moment from 'moment';
 
 const formatMessage = (username, text) => {
     return {
         username,
         text,
-        time: "15:13 AM"
-        //time: moment().format('h:mm a')
+        time: moment().format('h:mm a')
     }
 }
 

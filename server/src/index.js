@@ -22,15 +22,15 @@ app.use(
 // app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
-    //remove .. when deploying
-    const clientPath = path.resolve('../../client/src/index.html');
+    //remove .. when deploying and add when on localhost
+    const clientPath = path.resolve('../client/src/index.html');
     console.log(clientPath);
     res.sendFile(clientPath)
 })
 
 /*
 delete this when everything's fine shifted this line at 40
- 
+
 socket.on("connect_error", (err) => {
     console.log(err.message);
 });

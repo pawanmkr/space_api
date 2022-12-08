@@ -6,7 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server, { cors: { origin: "*" }});
 const userRoutes = require('../routes/user')
 const bodyParser = require('body-parser')
-const socket = require("socket.io-client")("http://localhost:4000");
+const socket = require('socket.io');
+//const socket = require("socket.io-client")("http://localhost:4000");
 var player = require('play-sound')(opts = {})
 const formatMessage = require('../utils/formatMessage');
 const path = require('path');
@@ -21,17 +22,27 @@ app.use(
 // app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
-    const clientPath = path.resolve('../client/src/index.html');
+    //remove .. when deploying
+    const clientPath = path.resolve('../../client/src/index.html');
     console.log(clientPath);
     res.sendFile(clientPath)
 })
 
+/*
+delete this when everything's fine shifted this line at 40
+ 
 socket.on("connect_error", (err) => {
     console.log(err.message);
 });
+*/
 
 //socket.io listening for connections events
 io.on("connection", (socket) => {
+
+    //if any error occurs on connection
+    socket.on("connect_error", (err) => {
+        console.log(err.message);
+    });
 
     const userId = socket.id;
     console.log('userID: ' + userId);

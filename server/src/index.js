@@ -23,7 +23,7 @@ app.use(
 
 app.get('/', (req, res) => {
     //remove .. when deploying and add when on localhost
-    const clientPath = path.resolve('../client/src/index.html');
+    const clientPath = path.resolve('../../client/src/index.html');
     console.log(clientPath);
     res.sendFile(clientPath)
 })

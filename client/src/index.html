@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
+    <!-- <link rel="stylesheet" href="./css/style.css"> -->
     <title>chatroom</title>
 </head>
 <body>
@@ -36,7 +36,8 @@
     <script src="https://cdn.socket.io/4.5.3/socket.io.min.js" integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi" crossorigin="anonymous"></script>
     <script>
 
-        const socket = io('http://localhost:4000');
+        // const socket = io('http://localhost:4000');
+        const socket = io();
         const form = document.getElementById('form');
         const messageBody = document.querySelector('.messages');
 
@@ -52,7 +53,7 @@
         }
 
         socket.on('message', (message) => {
-            console.log("send by the server: " + message);
+            console.log("send by the server: " + message.text);
             outputMessage(message);
 
             //scroll to top

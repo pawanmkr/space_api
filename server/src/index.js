@@ -63,10 +63,10 @@ io.on("connection", (socket) => {
         io.emit('message', formatMessage('chatbot', message));
 
         //playing notification sound
-        player.play('../audio/hnm.mp3', (err) => {
-            if(err) {
-                throw err;
-            }
-        });
+        // player.play('../audio/hnm.mp3', (err) => {
+        //     if(err) {
+        //         throw err;
+        //     }
+        // });
     });
 })

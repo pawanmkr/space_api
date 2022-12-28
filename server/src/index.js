@@ -2,10 +2,17 @@ const express = require('express');
 const app = express();
 const socketio = require('socket.io');
 
-const userRoutes = require('../routes/user');
+const userRoutes = require('./routes/user');
 const bodyParser = require('body-parser');
 const player = require('play-sound')(opts = {});
+const path = require('path');
 const formatMessage = require('../utils/formatMessage');
+const arrofRooms = require('./classes/room');
+const roomCreaterFunction = require('./classes/room');
+
+const clog = (msg) => {
+    console.log(msg)
+}
 
 app.use(bodyParser.json())
 app.use(
@@ -13,60 +20,46 @@ app.use(
         extended: true
     })
 );
-app.use(express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, '..', './views'));
+app.set('view engine', 'pug');
 
-// app.use('/', userRoutes);
+const pathToPublicFolder = path.join(__dirname, '..', '/public');
+app.use(express.static(pathToPublicFolder));
 
-// app.get('/', (req, res) => {
-//     //remove .. when deploying and add when on localhost
-//     const clientPath = path.resolve('../../client/src/index.html');
-//     console.log(clientPath);
-//     res.sendFile(clientPath)
-// })
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+app.post('/form', (req, res) => {
+    // Get the form data from the request body
+    arrofRooms.arrofRooms.push(
+        roomCreaterFunction.createNewRoom(req.body.roomname, req.body.roomcapacity)
+    );
+    clog(arrofRooms.arrofRooms)
+    res.render('chatroom', {
+        arrofRooms: arrofRooms.arrofRooms
+    });
+});
 
 const expressServer = app.listen(process.env.PORT || 4000, () => {
-    console.log(`Server's up & running on http://localhost:4000/`)
+    console.log(`Server's up & running on http://localhost:4000/`);
 })
-
-/*
-delete this when everything's fine shifted this line at 40
-
-socket.on("connect_error", (err) => {
-    console.log(err.message);
-});
-*/
 
 const io = socketio(expressServer);
 
-//socket.io listening for connections events
-io.on("connection", (socket) => {
+// io.on("connection", (socket) => {
+//     console.log(`connected from server side with socketId: ${socket.id}`);
+//     socket.emit('roomList', allRooms);
+// });
 
-    //if any error occurs on connection
-    socket.on("connect_error", (err) => {
-        console.log(err.message);
+arrofRooms.arrofRooms.forEach((room) => {
+    io.of(`${room.nameSpace}`).on('connection', (socket) => {
+        clog(`${room.nameSpace} has connected.`);
+
+        socket.on('chatMessage', (msg) => {
+            console.log(`chatMessage from Client says ${msg}`);
+        });
     });
+});
 
-    const userId = socket.id;
-    console.log('userID: ' + userId);
-
-    socket.broadcast.emit('message', formatMessage('newUser', 'a new user has joined the chat'));
-    
-    socket.on('disconnect', () => {
-        io.emit('message', formatMessage('human', 'a user left the chatroom'));
-    });
-    
-    //catching the chatMessage coming from client input
-    socket.on('sendChatMessage', (message) => {
-        console.log("received from client: " + message);
-        
-        //sending chatMessage back to client after receiving on server
-        io.emit('message', formatMessage('chatbot', message));
-
-        //playing notification sound
-        // player.play('../audio/hnm.mp3', (err) => {
-        //     if(err) {
-        //         throw err;
-        //     }
-        // });
-    });
-})
+module.exports = clog;

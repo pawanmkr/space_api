@@ -1,0 +1,22 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel="stylesheet", href="style/home.css")
+    title Chat App
+  body
+    .existing-rooms
+      h2 Join Existing Room
+      ul.rooms-list-box
+        li
+          | 1. Music: talk about Music and stuff...| Active: 13 | Admin: Sagar Babu +3
+    .create-new-room-form
+      form(action='/form', method='post')
+        input#room-name(type='text', name='roomname', placeholder='Enter room name...')
+        input#room-capacity(type='text', name='roomcapacity', placeholder='Capacity')
+        button#create-room-btn(type='submit') Create New
+
+  script(src="/socket.io/socket.io.js") 
+  script(src="/js/main.js" type="module")

@@ -1,4 +1,4 @@
-const db = require('../database/db')
+const db = require('../../database/db')
 
 const getAll = (req, res) => {
     db.pool.query('SELECT * FROM task_management.employee', (error, result) => {

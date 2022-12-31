@@ -30,29 +30,16 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.post('/Chatboard', (req, res) => {
+app.post('/form', (req, res) => {
     // Get the form data from the request body
     arrofRooms.arrofRooms.push(
         roomCreaterFunction.createNewRoom(req.body.roomname, req.body.roomcapacity)
     );
+    clog(arrofRooms.arrofRooms)
     res.render('chatroom', {
         arrofRooms: arrofRooms.arrofRooms
     });
 });
-
-const openroom = () => {
-    var endpoints = [];
-    arrofRooms.arrofRooms.forEach((room) => {
-        endpoints.push(room.roomTitle);
-    })
-    console.log(endpoints)
-
-    app.post(endpoints, (req, res) => {
-        res.render('chatroom', {
-            roomtitle: roomTitle
-        })
-    });
-}
 
 const expressServer = app.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`);
@@ -65,23 +52,13 @@ const io = socketio(expressServer);
 //     socket.emit('roomList', allRooms);
 // });
 
-// arrofRooms.arrofRooms.forEach((room) => {
-//     io.of(`${room.nameTitle}`).on('connection', (room) => {
-//         clog(`${room.nameTitle} has connected.`);
-//         //openroom();
+arrofRooms.arrofRooms.forEach((room) => {
+    io.of(`${room.nameSpace}`).on('connection', (socket) => {
+        clog(`${room.nameSpace} has connected.`);
 
-//         socket.on('chatMessage', (msg) => {
-//             console.log(`chatMessage from Client says ${msg}`);
-//         });
-//     });
-// });
-
-io.of('/pawan').on('connection', (socket) => {
-    clog(`pawan has connected.`);
-    //openroom();
-
-    socket.on('chatMessage', (msg) => {
-        console.log(`chatMessage from Client says ${msg}`);
+        socket.on('chatMessage', (msg) => {
+            console.log(`chatMessage from Client says ${msg}`);
+        });
     });
 });
 

@@ -15,15 +15,20 @@ html(lang='en')
       .room-list
         h2 Joined Rooms
         ul
-          each item in arrofRooms
-            form(action=item.roomTitle, method='post')#room-in-roomlist
-              button(type="submit")#room-btn
-                p#room-title-in-room-list= item.roomTitle
-                p
-                  | Active: 
-                  span 12
-                  | , Admin: 
-                  span Ritik Pal
+          li#room-tab-in-left
+            p#room-title-in-room-list Big Boss
+            p
+              | Active: 
+              span 12
+              | , Admin: 
+              span Ritik Pal
+          li
+            p#room-title-in-left Kaale kachhe wale
+            p
+              | Active: 
+              span 23
+              | , Admin: 
+              span Sagar +3
     .middle
       .room-details-top
         p#room-title-in-middle Kaale kachhe wale
@@ -31,7 +36,7 @@ html(lang='en')
       .chat-box#chat-box
         li #{arrofRooms}
       .input-field
-        form.input-form
+        form
           input#input-field-in-middle(type='text', placeholder='Type the message')
           button#attachment-btn-in-middle
             img#attachment-icon(src='/assets/attach.png')
@@ -56,21 +61,13 @@ html(lang='en')
   script.
     var arrofRooms = JSON.parse('!{JSON.stringify(arrofRooms)}');
     console.log(arrofRooms);
-    //- Array.from(arrofRooms).forEach((room) => {
-    //-   const socket = io(room.roomTitle);
-
-    //-   socket.on('connect', (room) => {
-    //-     console.log(`A client with Namespace: ${room.roomTitle} has connected succesfully.`);
-    //-   });
-
-    //-   socket.emit('chatMessage', "vande bharat");
-    //-   console.log("vande bharat emitted from client");
-    //- });
-
-    const socket = io('/pawan');
+    Array.from(arrofRooms).forEach((room) => {
+      const socket = io(room.nameSpace);
 
       socket.on('connect', (socket) => {
-        console.log(`A client with Namespace: /pawan has connected succesfully.`);
+        console.log(`A client with Namespace: '${room.nameSpace}' has connected succesfully.`);
       });
 
       socket.emit('chatMessage', "vande bharat");
+      console.log("vande bharat emitted from client");
+    });

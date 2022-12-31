@@ -23,9 +23,9 @@ const createNewRoom = (roomTitle, roomCapacity) => {
     //generate roomId for sharing
     const roomId = uuid.v4().replace(/-/g, '').substring(0, 5);
     return new Room(roomId, roomTitle, roomCapacity, roomId);
-};
+}
+
 const arrofRooms = [];
-arrofRooms.push(createNewRoom('testroom-title', 12));
 
 exports.arrofRooms = arrofRooms;
 exports.createNewRoom = createNewRoom;

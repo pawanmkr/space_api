@@ -18,6 +18,11 @@ body {
     background-color: #21242B;
 }
 
+#room-tab-in-left {
+    list-style-type: none;
+    margin: 10px;
+    border: 2px solid white;
+}
 
 .middle {
     flex-grow: 3;
@@ -39,7 +44,7 @@ body {
     justify-content: center;
 }
 
-.input-form {
+form {
     width: 95%;
     display: flex;
     justify-content: space-around;

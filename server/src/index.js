@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
-const socketio = require('socket.io');
-
+const httpServer = require('http').createServer(app);
+const io = require('socket.io')(httpServer, {
+    cors: {
+      origin: "http://localhost:4000",
+      methods: ["GET", "POST"]
+    }
+});
 const userRoutes = require('./routes/user');
 const bodyParser = require('body-parser');
 const player = require('play-sound')(opts = {});
@@ -30,59 +35,45 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+httpServer.listen(process.env.PORT || 4000, () => {
+    console.log(`Server's up & running on http://localhost:4000/`);
+    clog(arrofRooms.arrofRooms[0]);
+})
+
+//const io = socketio(expressServer);
+
 app.post('/Chatboard', (req, res) => {
     // Get the form data from the request body
     arrofRooms.arrofRooms.push(
         roomCreaterFunction.createNewRoom(req.body.roomname, req.body.roomcapacity)
     );
+    createNamespace(req.body.roomname);
     res.render('chatroom', {
-        arrofRooms: arrofRooms.arrofRooms
+        room: req.body.roomname
     });
 });
 
-const openroom = () => {
-    var endpoints = [];
-    arrofRooms.arrofRooms.forEach((room) => {
-        endpoints.push(room.roomTitle);
-    })
-    console.log(endpoints)
+let chatMessage = 'default chat message';
 
-    app.post(endpoints, (req, res) => {
-        res.render('chatroom', {
-            roomtitle: roomTitle
-        })
-    });
-}
 
-const expressServer = app.listen(process.env.PORT || 4000, () => {
-    console.log(`Server's up & running on http://localhost:4000/`);
-})
+app.post('/chatmessage', (req, res) => {
 
-const io = socketio(expressServer);
-
-// io.on("connection", (socket) => {
-//     console.log(`connected from server side with socketId: ${socket.id}`);
-//     socket.emit('roomList', allRooms);
-// });
-
-// arrofRooms.arrofRooms.forEach((room) => {
-//     io.of(`${room.nameTitle}`).on('connection', (room) => {
-//         clog(`${room.nameTitle} has connected.`);
-//         //openroom();
-
-//         socket.on('chatMessage', (msg) => {
-//             console.log(`chatMessage from Client says ${msg}`);
-//         });
-//     });
-// });
-
-io.of('/pawan').on('connection', (socket) => {
-    clog(`pawan has connected.`);
-    //openroom();
-
-    socket.on('chatMessage', (msg) => {
-        console.log(`chatMessage from Client says ${msg}`);
-    });
 });
+
+async function createNamespace(roomname) {
+    const nameSpace = io.of(`/${roomname}`);
+    await nameSpace.on('connection', (socket) => {
+        clog(`${socket.id} has connected in ${roomname}`);
+
+        socket.on("chatMessageForServer", (msg) => {
+            console.log(msg);
+            //add msg to db
+            nameSpace.emit('chatMessageForClient', msg);
+        });
+        socket.on("disconnecting", (reason) => {
+            console.log(reason);
+        });
+    });
+};
 
 module.exports = clog;

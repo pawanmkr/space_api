@@ -54,27 +54,57 @@ html(lang='en')
 
     script(src="socket.io/socket.io.js") 
     script.
+        //- async function establishConnection() {
+        //-   //dom manipulation here
+        //-   const roomTitleinRoomList = document.getElementById('room-title-in-room-list');
+        //-   const roomTitleinMiddle = document.getElementById('room-title-in-middle');
+        //-   const inputFieldinMiddle = document.getElementById('input-field-in-middle');
+        //-   const sendBtninMiddle = document.getElementById('send-btn-in-middle');
+        //-   const inputForm = document.querySelector('.input-form');
+        //-   const chatBox = document.getElementById('chat-box');
+
+        //-   roomTitleinRoomList.innerText = room;
+        //-   roomTitleinMiddle.innerText = room;
+
+        //-   var room = JSON.parse('!{JSON.stringify(room)}');
+        //-   console.log(room);
+
+        //-   console.log("entered chatroom");
+        //-   const socket = io(`/${room}`, {
+        //-       transports: ['websocket'],
+        //-       //upgrade: false,
+        //-       //rejectUnauthorized: false
+        //-   });
+
+        //-   await socket.on('connect', () => {
+        //-       console.log(`connected to ${socket.id}`);
+        //-       socket.emit('event', "client connected boss");
+        //-       socket.on('event', (msg) => {
+        //-           console.log(msg);
+        //-       });
+        //-   });
+        //- } 
+
+        //- establishConnection();
+
         //dom manipulation here
-        const roomTitleinRoomList = document.getElementById('room-title-in-room-list');
-        const roomTitleinMiddle = document.getElementById('room-title-in-middle');
-        const inputFieldinMiddle = document.getElementById('input-field-in-middle');
-        const sendBtninMiddle = document.getElementById('send-btn-in-middle');
-        const inputForm = document.querySelector('.input-form');
-        const chatBox = document.getElementById('chat-box');
+          const roomTitleinRoomList = document.getElementById('room-title-in-room-list');
+          const roomTitleinMiddle = document.getElementById('room-title-in-middle');
+          const inputFieldinMiddle = document.getElementById('input-field-in-middle');
+          const sendBtninMiddle = document.getElementById('send-btn-in-middle');
+          const inputForm = document.querySelector('.input-form');
+          const chatBox = document.getElementById('chat-box');
 
-        const createRoom = (room) => {
-            roomTitleinRoomList.innerText = room;
-            roomTitleinMiddle.innerText = room;
-        }
-        createRoom(room);
+          roomTitleinRoomList.innerText = room;
+          roomTitleinMiddle.innerText = room;
 
-        
-
-        var room = JSON.parse('!{JSON.stringify(room)}');
-        console.log(room);
+          var room = JSON.parse('!{JSON.stringify(room)}');
+          console.log(room);
 
         const createNamespace = (room) => {
-            const socket = io(`/${room}`);
+            const socket = io(`/${room}`, {
+              transports: ['websocket']
+            });
 
             socket.on('connect', () => {
                 console.log(`A client with Namespace: ${room} has connected with socketId: ${socket.id}`);

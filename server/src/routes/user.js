@@ -1,8 +1,9 @@
-const express = require('express')
-const defaultController = require('../controller/controller')
+import express from "express";
+import { getAll as defaultController } from "../controller/controller.js";
 
 const router = express.Router()
 
-router.get('/', defaultController.getAll);
+router.get('/not-in-use-yet', defaultController);
 
-module.exports = router;
+
+export default router;

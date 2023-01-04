@@ -1,22 +1,30 @@
-const express = require('express');
+import express from "express";
 const app = express();
-const httpServer = require('http').createServer(app);
-const io = require('socket.io')(httpServer, {
+import http from "http";
+import { Server } from 'socket.io';
+import bodyParser from "body-parser";
+import path from "path";
+import userRoutes from "./routes/user.js";
+import formatMessage from "../utils/formatMessage.js";
+import { arrofRooms as arrofRooms } from './classes/roomClass.js';
+import { createNewRoom as roomCreater } from './classes/roomClass.js';
+import { URL } from "url";
+
+//const player = require('play-sound')(opts = {});
+
+const __dirname = decodeURI(new URL('.', import.meta.url).pathname);
+const pathToPublicFolder = path.join(__dirname, '..', '/public');
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
     cors: {
       origin: "http://localhost:4000",
       methods: ["GET", "POST"]
     }
 });
-const userRoutes = require('./routes/user');
-const bodyParser = require('body-parser');
-const player = require('play-sound')(opts = {});
-const path = require('path');
-const formatMessage = require('../utils/formatMessage');
-const arrofRooms = require('./classes/room');
-const roomCreaterFunction = require('./classes/room');
 
-const clog = (msg) => {
-    console.log(msg)
+function log(msg) {
+    console.log(msg);
 }
 
 app.use(bodyParser.json())
@@ -25,10 +33,10 @@ app.use(
         extended: true
     })
 );
+
 app.set('views', path.join(__dirname, '..', './views'));
 app.set('view engine', 'pug');
 
-const pathToPublicFolder = path.join(__dirname, '..', '/public');
 app.use(express.static(pathToPublicFolder));
 
 app.get('/', (req, res) => {
@@ -37,43 +45,47 @@ app.get('/', (req, res) => {
 
 httpServer.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`);
-    clog(arrofRooms.arrofRooms[0]);
+    roomCreater("tron", 100);
+    log(arrofRooms);
 })
 
-//const io = socketio(expressServer);
+const nameSpaces = [];
 
-app.post('/Chatboard', (req, res) => {
+app.post('/chatboard', (req, res) => {
     // Get the form data from the request body
-    arrofRooms.arrofRooms.push(
-        roomCreaterFunction.createNewRoom(req.body.roomname, req.body.roomcapacity)
+    arrofRooms.push(
+        roomCreater(req.body.roomname, req.body.roomcapacity)
     );
-    createNamespace(req.body.roomname);
+    establishConnection();
     res.render('chatroom', {
         room: req.body.roomname
     });
 });
 
-let chatMessage = 'default chat message';
+async function establishConnection() {
+    await io.of(/^\/\w+$/).on('connection', async (socket) => {
+        const workspace = socket.nsp;
+        const namespace = workspace.name;
+        console.log("New Connection NameSpace", namespace, socket.id);
+        socket.emit('sendFromServer', `Hello from server but outer part: ${socket.id}`);
 
+        // you can test here if "namespace" is allowed to be used
+        // if event handlers are set no need to got further
+        if (nameSpaces[namespace]) return;
 
-app.post('/chatmessage', (req, res) => {
+        // save workspace to prevent setting event handlers on each connection
+        nameSpaces[namespace] = workspace;        
+        await workspace.on("connection", (socket) => {
+            console.log(`${namespace} > connection from ${socket.id}`);
+            // set the event handlers same as normal socket
+            socket.on('event', (msg) => {
+                console.log("event", msg);
+                workspace.emit('event', msg);
+            })
 
-});
-
-async function createNamespace(roomname) {
-    const nameSpace = io.of(`/${roomname}`);
-    await nameSpace.on('connection', (socket) => {
-        clog(`${socket.id} has connected in ${roomname}`);
-
-        socket.on("chatMessageForServer", (msg) => {
-            console.log(msg);
-            //add msg to db
-            nameSpace.emit('chatMessageForClient', msg);
-        });
-        socket.on("disconnecting", (reason) => {
-            console.log(reason);
-        });
-    });
+            socket.on('disconnect', (reason) => {
+                console.log(`${namespace}/${socket.id} > disconnected due to: ${reason}`);
+            });
+        })
+    })
 };
-
-module.exports = clog;

@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+import { v4 as uuid } from 'uuid';
 //the socket.io offers both namespace and room but in my case i don't rooms
 //namespace is enough for this specific app so i will not be using room
 //and i'll namespace directly as room
@@ -19,18 +19,10 @@ class Room {
     }
 }
 
-const createNewRoom = (roomTitle, roomCapacity) => {
+export const arrofRooms = [];
+export const createNewRoom = (roomTitle, roomCapacity) => {
     //generate roomId for sharing
-    const roomId = uuid.v4().replace(/-/g, '').substring(0, 5);
-    return new Room(roomId, roomTitle, roomCapacity, roomId);
+    const roomId = uuid().replace(/-/g, '').substring(0, 5);
+
+    arrofRooms.push(new Room(roomId, roomTitle, roomCapacity, roomId));
 };
-const arrofRooms = [];
-arrofRooms.push(createNewRoom('testroom-title', 12));
-
-exports.arrofRooms = arrofRooms;
-exports.createNewRoom = createNewRoom;
-
-// module.exports = {
-//     arrofRooms,
-//     createNewRoom
-// };

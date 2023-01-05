@@ -1,6 +1,6 @@
-const db = require('../database/db')
+import db from "../database/db.js";
 
-const getAll = (req, res) => {
+export const getAll = (req, res) => {
     db.pool.query('SELECT * FROM task_management.employee', (error, result) => {
         if(error) {
             console.log(error);
@@ -12,8 +12,4 @@ const getAll = (req, res) => {
 
 const pickmsg = (req, res) => {
     var user = body.user;
-}
-
-module.exports = {
-    getAll
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/home.css">
+    <title>Chat App</title>
+  </head>
+  <body>
+    <div class="existing-rooms">
+      <h2>Join Existing Room</h2>
+      <ul class="rooms-list-box">
+        <li>1. Music: talk about Music and stuff...| Active: 13 | Admin: Sagar Babu +3</li>
+      </ul>
+    </div>
+    <div class="create-new-room-form">
+      <form action="/form" method="post">
+        <input id="room-name" type="text" name="roomname" placeholder="Enter room name...">
+        <input id="room-capacity" type="text" name="roomcapacity" placeholder="Capacity">
+        <button id="create-room-btn" type="submit">Create New</button>
+      </form>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"> </script>
+  <script src="/js/main.js" type="module"></script>
+</html>

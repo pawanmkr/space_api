@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/chatroom.css">
+    <script src="socket.io/socket.io.js"> </script>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div class="left">
+      <div class="profile"><img src="/assets/dp.jpg" width="50px" height="50px" alt="" srcset="">
+        <h1>zxcvbnm</h1>
+      </div>
+      <div class="room-list">
+        <h2>Joined Rooms</h2>
+        <ul>
+          <li id="room-tab-in-left">
+            <p id="room-title-in-room-list">Big Boss</p>
+            <p>Active: <span>12</span>, Admin: <span>Ritik Pal</span></p>
+          </li>
+          <li>
+            <p id="room-title-in-left">Kaale kachhe wale</p>
+            <p>Active: <span>23</span>, Admin: <span>Sagar +3</span></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="middle">
+      <div class="room-details-top">
+        <p id="room-title-in-middle">Kaale kachhe wale</p>
+        <p id="room-desc-in-middle">two friends apopted kala kachha, no one was noticing them...</p>
+      </div>
+      <div class="chat-box" id="chat-box">
+        
+      </div>
+      <div class="input-field">
+        <form class="input-form">
+          <input id="input-field-in-middle" type="text" placeholder="Type the message">
+          <button id="attachment-btn-in-middle"><img id="attachment-icon" src="/assets/attach.png"></button>
+          <button id="send-btn-in-middle" type="submit"><img id="send-icon" src="/assets/send.png" alt="" srcset=""></button>
+        </form>
+      </div>
+    </div>
+    <div class="right">
+      <h2>Active</h2>
+      <ul id="admins-in-room-right">
+        <h2>#Admin</h2>
+        <li>sagar neupane</li>
+        <li>shubham pandey</li>
+      </ul>
+      <ul id="non-admins-in-room-right">
+        <h2>#Non-Admins</h2>
+        <li>sanjay kandel</li>
+        <li>ankush kumar</li>
+        <li>pawan kumar</li>
+        <li>harsh tiwari</li>
+        <li>ashwani yadav</li>
+        <li>jetram singh</li>
+        <li>vasudev sharma</li>
+      </ul>
+    </div>
+  </body>
+  <script>var arrofRooms = JSON.parse('');
+    console.log(arrofRooms);
+    Array.from(arrofRooms).forEach((room) => {
+      const socket = io(room.nameSpace);
+    
+      socket.on('connect', (socket) => {
+        console.log(`A client with Namespace: '${room.nameSpace}' has connected succesfully.`);
+      });
+    
+      socket.emit('chatMessage', "vande bharat");
+      console.log("vande bharat emitted from client");
+    });
+  </script>
+</html>

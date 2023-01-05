@@ -1,0 +1,73 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='style/chatroom.css')
+    script(src="socket.io/socket.io.js")
+    title Dashboard
+  body
+    .left
+      .profile
+        img(src='/assets/dp.jpg', width='50px', height='50px', alt='', srcset='')
+        h1 zxcvbnm
+      .room-list
+        h2 Joined Rooms
+        ul
+          each item in arrofRooms
+            form(action=item.roomTitle, method='post')#room-in-roomlist
+              button(type="submit")#room-btn
+                p#room-title-in-room-list= item.roomTitle
+                p
+                  | Active: 
+                  span 12
+                  | , Admin: 
+                  span Ritik Pal
+    .middle
+      .room-details-top
+        p#room-title-in-middle Kaale kachhe wale
+        p#room-desc-in-middle two friends apopted kala kachha, no one was noticing them...
+      .chat-box#chat-box
+        li #{arrofRooms}
+      .input-field
+        form.input-form
+          input#input-field-in-middle(type='text', placeholder='Type the message')
+          button#attachment-btn-in-middle
+            img#attachment-icon(src='/assets/attach.png')
+          button#send-btn-in-middle(type='submit')
+            img#send-icon(src='/assets/send.png', alt='', srcset='')
+    .right
+      h2 Active
+      ul#admins-in-room-right
+        h2 #Admin
+        li sagar neupane
+        li shubham pandey
+      ul#non-admins-in-room-right
+        h2 #Non-Admins
+        li sanjay kandel
+        li ankush kumar
+        li pawan kumar
+        li harsh tiwari
+        li ashwani yadav
+        li jetram singh
+        li vasudev sharma
+
+  script.
+    var arrofRooms = JSON.parse('!{JSON.stringify(arrofRooms)}');
+    console.log(arrofRooms);
+
+    const createNamespace = (arrofRooms) => {
+      const socket = io(arrofRooms.roomTitle);
+
+      socket.on('connect', (socket) => {
+        console.log(`A client with Namespace: ${arrofRooms.roomTitle} has connected with socketId: ${socketId}`);
+      });
+
+      socket.emit('chatMessage', "vande bharat");
+      console.log("vande bharat emitted from client");
+    }
+
+    Array.from(arrofRooms).forEach((room) => {
+      createNamespace(room);
+    });

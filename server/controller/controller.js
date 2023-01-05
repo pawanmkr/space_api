@@ -1,4 +1,4 @@
-import db from "../../database/db.js";
+import db from "../database/db.js";
 
 export const getAll = (req, res) => {
     db.pool.query('SELECT * FROM task_management.employee', (error, result) => {

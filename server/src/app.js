@@ -27,7 +27,7 @@ app.use('/chatboard', socketRoutes);
 
 app.use('/namespace', socketRoutes);
 
-app.get('/loaderio-cd4debf78fbcf958ec0b461ad0fca78f', (req, res) => {
+app.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
     res.sendFile(path.join(__dirname, './loaderio-cd4debf78fbcf958ec0b461ad0fca78f.txt'));
 });
 

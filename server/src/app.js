@@ -28,7 +28,7 @@ app.use('/chatboard', socketRoutes);
 app.use('/namespace', socketRoutes);
 
 app.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
-    res.sendFile(path.join(__dirname, './loaderio-cd4debf78fbcf958ec0b461ad0fca78f.txt'));
+    res.sendFile(path.join(__dirname, './loaderio-0322896b81b856472cf240f5e4a889ad.html'));
 });
 
 server.listen(process.env.PORT || 4000, () => {

@@ -26,7 +26,10 @@ app.use('/', socketRoutes);
 app.use('/chatboard', socketRoutes);
 
 app.use('/namespace', socketRoutes);
-  
+
+app.get('/loaderio-cd4debf78fbcf958ec0b461ad0fca78f', (req, res) => {
+    res.sendFile(path.join(__dirname, './loaderio-cd4debf78fbcf958ec0b461ad0fca78f.txt'));
+});
 
 server.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`);

@@ -1,5 +1,4 @@
 import express from "express";
-import { getAll as defaultController } from "../controller/controller.js";
 import createNamespace from "../controller/createNamespace.js";
 import joinNamespace from "../controller/joinNamespace.js";
 import homePage from "../controller/homePage.js";

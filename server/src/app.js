@@ -5,6 +5,7 @@ import { URL } from "url";
 import http from 'http';
 import socketRoutes from "../routes/socketRoutes.js";
 import { io } from "../socketio/socketio.js";
+import createTables from "../controller/createTables.js";
 
 //const player = require('play-sound')(opts = {});
 
@@ -21,6 +22,8 @@ app.use(express.static(pathToPublicFolder));
 app.set('views', path.join(__dirname, '..', './views'));
 app.set('view engine', 'pug');
 
+createTables();
+
 app.use('/', socketRoutes);
 
 app.use('/chatboard', socketRoutes);
@@ -33,7 +36,6 @@ app.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
 
 server.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`);
-    console.log(1);
 })
 
 io(server);

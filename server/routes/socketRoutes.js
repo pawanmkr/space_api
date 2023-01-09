@@ -7,6 +7,12 @@ const router = express.Router()
 
 router.get('/', homePage);
 
+router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
+    res.sendFile(path.join(
+        __dirname, '..', '/utils', '/loaderio-0322896b81b856472cf240f5e4a889ad.txt'
+    ));
+});
+
 //router.post('/', createNamespace);
 router.post('/create/:name', createNamespace);
 router.post('/join/:name', joinNamespace);

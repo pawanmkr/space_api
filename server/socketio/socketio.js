@@ -10,34 +10,37 @@ export function io(server) {
 }
 
 // to store metadata of namespaces
-export const nameSpaces = [];
+export const spaces = [];
 
 export default async function socketio(name) {
     await io.of(/^\/\w+$/ || name).on('connection', async (socket) => {
-        const namespaceMetadata = socket.nsp;
-        const namespace = namespaceMetadata.name;
-        console.log("New Connection NameSpace", namespace, socket.id);
+        const spaceMetadata = socket.nsp;
+        const space = spaceMetadata.name;
+        console.log("New Connection NameSpace", space, socket.id);
 
         socket.on('confirmation', msg => {
-            namespaceMetadata.emit('confirmation', msg);
+            spaceMetadata.emit('confirmation', msg);
         });
 
-        if (nameSpaces[namespace]) { return; }
+        if (spaces[space]) { return; }
         else {
-            nameSpaces[namespace] = namespaceMetadata;
+            spaces[space] = spaceMetadata;
         }
 
-        await namespaceMetadata.on("connection", (socket) => {
-            console.log(`${namespace} > connection from ${socket.id}`);
+        await spaceMetadata.on("connection", (socket) => {
+            console.log(`${space} > connection from ${socket.id}`);
             // set the event handlers same as normal socket
             socket.on('chatMessageForServer', (msg) => {
                 console.log(msg);
-                namespaceMetadata.emit('chatMessageForClient', msg);
+                spaceMetadata.emit('chatMessageForClient', msg);
             })
 
             socket.on('disconnect', (reason) => {
-                console.log(`${namespace}/${socket.id} > disconnected due to: ${reason}`);
+                console.log(`${space}/${socket.id} > disconnected due to: ${reason}`);
             });
         })
     })
+    return {
+        spaceMetadata,
+    };
 };

@@ -1,6 +1,12 @@
 server/node_modules
 package-lock.json
 
+<<<<<<< HEAD
 client/.DS_Store
 server/.DS_Store
 .DS_Store
+=======
+.DS_Store
+server/.DS_Store
+client/.DS_Store
+>>>>>>> 3be8ab6 (delete ds_store from main)

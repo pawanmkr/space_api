@@ -1,4 +1,5 @@
 export default function joinNamespace(req, res) {
     const { name } = req.params;
-    res.render('chatroom', { room: name });
+    res.json({ name: name })
+    // res.render('chatroom', { room: name });
 }

@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { arrofRooms } from "../classes/roomClass.js";
 import { createNewRoom } from "../classes/roomClass.js";
-import { nameSpaces } from "../socketio/socketio.js";
+import { spaces } from "../socketio/socketio.js";
 import socketio from "../socketio/socketio.js";
 
 

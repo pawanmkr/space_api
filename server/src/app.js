@@ -6,6 +6,7 @@ import http from 'http';
 import socketRoutes from "../routes/socketRoutes.js";
 import { io } from "../socketio/socketio.js";
 import createTables from "../controller/createTables.js";
+import cors from 'cors'
 
 //const player = require('play-sound')(opts = {});
 
@@ -15,6 +16,14 @@ const pathToPublicFolder = path.join(__dirname, '..', '/public');
 const app = express();
 const server = http.createServer(app);
 
+app.use(cors({
+    origin: '*',
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }))
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(pathToPublicFolder));
@@ -22,7 +31,7 @@ app.use(express.static(pathToPublicFolder));
 app.set('views', path.join(__dirname, '..', './views'));
 app.set('view engine', 'pug');
 
-createTables();
+// createTables();
 
 app.use('/', socketRoutes);
 

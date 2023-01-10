@@ -1,5 +1,6 @@
 import Room from "../../components/Room"
-import RadioHead from "../../assets/radiohead.jpg"
+import RadioHead from "../../assets/profile.png"
+
 const ChatRight = () => {
   return (
     <div className="chat-right">
@@ -11,17 +12,16 @@ const ChatRight = () => {
             </div>
             <h4 className="profile-name">Simon Paul</h4>
           </div>
-          <hr className="hr-line"/>
         </div>
 
 
-        <div className="chat-right__utils p-3">
-          <h5 className="mb-3 text-center">Joined Rooms</h5>
+        <div className="chat-right__utils p-2">
 
-          <div className="chat-right__utils_container p-2">
-            <Room room="Planet 101"/>
-            <Room room="Planet 835"/>
-            <Room room="Planet 690"/>
+          <div className="chat-right__utils_container pt-2 pb-2">
+            {/* <Room room="kaale kachhe wale"/> */}
+            <Room room=" Omly Fans no Grills"/>
+            <Room room="Duckbois on the move"/>
+            <Room room="blue pegasus: reincarnation"/>
           </div>
 
 

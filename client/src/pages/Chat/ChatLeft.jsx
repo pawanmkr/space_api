@@ -17,8 +17,7 @@ const ChatLeft = () => {
             </div>
             <div className="chat-left__content">
 
-
-                <div className="switch-btn p-3 pt-0">
+                {/* <div className="switch-btn p-3 pt-0">
                     <div className="switch-btn__container d-flex justify-content-center">
                         <div className="switch p-2 text-center">
                             <p className="mb-0 p-2 active-switch">Members</p>
@@ -27,12 +26,15 @@ const ChatLeft = () => {
                             <p className="mb-0 p-2 text-center">Media</p>
                         </div>
                     </div>
-                    {/* <hr className="hr-line" /> */}
-                </div>
+                    <hr className="hr-line" />
+                </div> */}
 
-                <div className="chat-left__utils p-3">
-                    <h5 className="mb-3 text-center">Active Members</h5>
-                    <div className="chat-left__utils_container p-2">
+                <div className="chat-left__utils">
+                    <div className="activity p-3">
+                        <p className="mb-0">Activity</p>
+                        <p className="online-green-dot">&#x2022;</p>
+                    </div>
+                    <div className="chat-left__utils_container pt-2 pb-2">
                         <Members member="Simon Paul" />
                         <Members member="Pawan Lamar" />
                         <Members member="Lakshay" />

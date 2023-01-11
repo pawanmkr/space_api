@@ -6,7 +6,8 @@ import http from 'http';
 import socketRoutes from "../routes/socketRoutes.js";
 import { io } from "../socketio/socketio.js";
 import createTables from "../controller/createTables.js";
-import cors from 'cors'
+import cors from 'cors';
+import chalk from 'chalk';
 
 //const player = require('play-sound')(opts = {});
 
@@ -31,11 +32,9 @@ app.use(express.static(pathToPublicFolder));
 app.set('views', path.join(__dirname, '..', './views'));
 app.set('view engine', 'pug');
 
-// createTables();
+createTables();
 
 app.use('/', socketRoutes);
-
-app.use('/chatboard', socketRoutes);
 
 app.use('/namespace', socketRoutes);
 

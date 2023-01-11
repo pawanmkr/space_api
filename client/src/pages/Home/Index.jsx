@@ -6,7 +6,7 @@ const Home = ({ space, handleFetch,setSpace }) => {
         <div className="home glass">
             <div className="glass d-flex justify-content-center align-items-center">
                 <Left space={space} setSpace={setSpace} handleFetch={handleFetch}/>
-                <Right />
+                {/* <Right /> */}
             </div>
         </div>
     )

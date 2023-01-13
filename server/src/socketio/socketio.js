@@ -12,8 +12,8 @@ export function io(server) {
 // to store metadata of namespaces
 export const spaces = [];
 
-export default async function socketio(name) {
-    await io.of(/^\/\w+$/ || name).on('connection', async (socket) => {
+export default async function socketio() {
+    await io.of(/^\/\w+$/).on('connection', async (socket) => {
         const spaceMetadata = socket.nsp;
         const space = spaceMetadata.name;
         console.log("New Connection NameSpace", space, socket.id);

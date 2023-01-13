@@ -1,1 +1,1 @@
-# temporary chat app for quick needs and media sharing
+# chatroom

@@ -3,9 +3,9 @@ import bodyParser from "body-parser";
 import path from "path";
 import { URL } from "url";
 import http from 'http';
-import socketRoutes from "../routes/socketRoutes.js";
-import { io } from "../socketio/socketio.js";
-import createTables from "../controller/createTables.js";
+import socketRoutes from "./routes/socketRoutes.js";
+import { io } from "./socketio/socketio.js";
+import createTables from "./controller/createTables.js";
 import cors from 'cors';
 import chalk from 'chalk';
 
@@ -23,14 +23,11 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['Content-Range', 'X-Content-Range'],
     methods: ['GET', 'POST', 'PUT', 'DELETE']
-  }))
+}))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(pathToPublicFolder));
-
-app.set('views', path.join(__dirname, '..', './views'));
-app.set('view engine', 'pug');
 
 createTables();
 

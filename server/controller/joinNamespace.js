@@ -1,14 +1,17 @@
 import chalk from "chalk";
 import crypto from "crypto";
-import { arrofRooms } from "../classes/roomClass.js";
-import { createNewRoom } from "../classes/roomClass.js";
 import { spaces } from "../socketio/socketio.js";
 import socketio from "../socketio/socketio.js";
-//import { addSpace } from "../models/spaceModel.js";
+import { Space } from "../models/space.js";
 import { User } from "../models/user.js";
+import { Junction } from "../models/junctionTable.js";
 
 function generateUID() {
-  return crypto.randomBytes(5).toString('hex');
+    return crypto.randomBytes(5).toString('hex');
+}
+
+function generateIntUID() {
+    return parseInt(crypto.randomBytes(5).toString('hex'), 16) % Math.pow(10, 6);
 }
 
 export default async function joinNamespace(req, res) {
@@ -18,19 +21,17 @@ export default async function joinNamespace(req, res) {
         console.log(`name: ${name}, username: ${username}`);
 
         //const spaceMetadata = socketio(name);
+        const spaceShareId = generateIntUID();
+        const spaceMetadata = { fake: "metadata" };
+        const userId = await User.addUser(username, spaceShareId);
 
-        const newUser = await User.addUser(username, 1);
-        const spaceId = generateUID();
-        // create addSpace function in space model
-        //addSpace(spaceId, spaceName, userId, createdAt, capacity, spaceMetadata);
-        res.sendStatus(501);
-        res.json({
-            Status: 200,
-            Message: `${username} joined ${name} successfully`,
-        });
+        const spaceId = await Space.addSpace(spaceShareId, name, userId, spaceMetadata);
+        await Junction.addJunction(userId, spaceId);
     } catch (error) {
-        console.log(`error while joining space in server/controller/joinNamespace.js`);
-        console.log(chalk.bgRed.white.bold(`ERROR >>> ${error.detail}`));
+        console.log(chalk.bgRed.white.bold(
+            "error while joining space in server/controller/joinNamespace.js"
+        ));
+        console.log(error);
         res.sendStatus(501);
         res.json({
             Error: error,

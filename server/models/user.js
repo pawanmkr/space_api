@@ -1,12 +1,13 @@
 import chalk from 'chalk';
 import pool from '../config/pool.js';
+import { Junction } from './junctionTable.js';
 
 export async function createUserTable() {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS user_table (
         id SERIAL PRIMARY KEY,
-        username VARCHAR(32) NOT NULL,
+        username VARCHAR(32) NOT NULL UNIQUE,
         space_id INTEGER,
         joined_at TIMESTAMP NOT NULL
       );
@@ -26,16 +27,9 @@ export class User {
         `SELECT * FROM user_table WHERE username=$1`,
         [username]
       );
-      if(checkUser.rowCount>0){
+      if( checkUser.rowCount > 0 ){
         console.log('user already exist');
-        const user_id = await pool.query(
-          `SELECT user_id FROM user_table WHERE username=$1`, [username]
-        );
-        await pool.query(
-          `INSERT INTO junction_table (user_id, space_id) VALUES ($1, $2)`,
-          [user_id, space_id]
-        );
-        return `${user_id} already exist, so we added him to the space`;
+        return checkUser.rows[0].id;
       }
     } catch (error) {
       console.log(chalk.bgRed.white.bold("error in models/users.js while checking if user exist"));
@@ -48,11 +42,10 @@ export class User {
         `INSERT INTO user_table (username, space_id, joined_at) VALUES ($1, $2, $3) RETURNING *`,
         [username, space_id, new Date()]
       );
-      console.log(chalk.bgGreen.black("User added"));
-      console.log(user.rows[0]);
+      return user.rows[0].id;
     } catch (error) {
-      console.log("error in models/users.js while adding user");
-      console.log(chalk.bgRed.white.bold(`ERROR >>> ${error}`));
+      console.log(chalk.bgRed.white.bold("error in models/users.js while adding user"));
+      console.log(error);
     }
   }
 };

@@ -10,13 +10,12 @@ export function io(server) {
 }
 
 export class Socketio {
-    static async createNamespace(spaceName) {
-        const space = io.of(`/${spaceName}`);
+    static async joinNamespace(name) {
+        const space = await io.of(`/${name}`);
+        space.on('connection', (socket) => {
+            console.log(`connected in ${spaceName} with id: ${socket.id}`);
+        })
         return space.name.slice(1);
-    }
-
-    static async joinNamespace() {
-
     }
 };
 

@@ -22,7 +22,7 @@ export default async function joinSpace(req, res) {
         const { username } = req.body;
         const spaceShareId = generateIntUID();
 
-        const spaceName = await Socketio.createNamespace(name);
+        const spaceName = await Socketio.joinNamespace(name);
         const user = await User.addUser(username, spaceShareId);
         const space = await Space.addSpace(spaceShareId, spaceName, user.id);
         await Junction.addJunction(user.id, space.id);

@@ -1,6 +1,5 @@
 import express from "express";
-import createNamespace from "../controller/createNamespace.js";
-import joinNamespace from "../controller/joinNamespace.js";
+import joinSpace from "../controller/joinSpace.js";
 import homePage from "../controller/homePage.js";
 
 const router = express.Router()
@@ -13,8 +12,12 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
     ));
 });
 
-//router.post('/', createNamespace);
-router.post('/create/:name', createNamespace);
-router.post('/join/:name', joinNamespace);
+router.post('/join/:name', async (req, res) => {
+    await joinSpace(req, res)
+    .then((data) => {
+        console.log(data);
+        res.status(200).json(data);
+    });
+});
 
 export default router;

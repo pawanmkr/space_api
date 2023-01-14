@@ -37,7 +37,18 @@ export class Junction {
       pool.query(
         `INSERT INTO junction_table (user_id, space_id) VALUES($1, $2) RETURNING *`,
         [user_id, space_id]
-      );
+      )
+      .then(() => {
+        console.log(chalk.bgGreen.black("Junction added"));
+        resolve();
+      })
+      .catch((error) => {
+        console.log(
+          chalk.bgRed.white.bold("error in models/junctionTable.js while adding junction")
+        );
+        console.log(error);
+        reject();
+      });
     })
   }
 }

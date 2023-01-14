@@ -11,8 +11,7 @@ export class Space {
           name VARCHAR(64) NOT NULL,
           user_id INTEGER NOT NULL,
           capacity INTEGER DEFAULT 100,
-          created_at TIMESTAMP NOT NULL,
-          metadata JSON NOT NULL
+          created_at TIMESTAMP NOT NULL
         );`
       );
       console.log(chalk.bgGreen.black("Space Table Created"));
@@ -27,10 +26,11 @@ export class Space {
   static async addSpace(space_id, space_name, user_id, space_metadata) {
     return new Promise(async (resolve, reject) => {
       await pool.query(`
-        INSERT INTO space (id, name, user_id, created_at, metadata) VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-        [space_id, space_name, user_id, new Date(), space_metadata])
+        INSERT INTO space (id, name, user_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *;`,
+        [space_id, space_name, user_id, new Date()])
       .then((result) => {
         console.log(chalk.bgGreen.black("Space Added"));
+        console.log(result.rows[0]);
         return resolve(result.rows[0]);
       })
       .catch((error) => {

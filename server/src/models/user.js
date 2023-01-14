@@ -29,7 +29,7 @@ export class User {
       );
       if( checkUser.rowCount > 0 ){
         console.log('user already exist');
-        return checkUser.rows[0].id;
+        return checkUser.rows[0];
       }
     } catch (error) {
       console.log(chalk.bgRed.white.bold("error in models/users.js while checking if user exist"));
@@ -42,7 +42,8 @@ export class User {
         `INSERT INTO user_table (username, space_id, joined_at) VALUES ($1, $2, $3) RETURNING *`,
         [username, space_id, new Date()]
       );
-      return user.rows[0].id;
+      console.log(chalk.bgGreen.black("User added"));
+      return user.rows[0];
     } catch (error) {
       console.log(chalk.bgRed.white.bold("error in models/users.js while adding user"));
       console.log(error);

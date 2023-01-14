@@ -31,7 +31,7 @@ export class Space {
         [space_id, space_name, user_id, new Date(), space_metadata])
       .then((result) => {
         console.log(chalk.bgGreen.black("Space Added"));
-        return resolve(result.rows[0].id);
+        return resolve(result.rows[0]);
       })
       .catch((error) => {
         console.log(

@@ -41,4 +41,22 @@ export class Space {
       });
     });
   }
+
+  static async getAllSpace() {
+    return new Promise(async (resolve, reject) => {
+      await pool.query(
+        `SELECT * FROM space;`)
+      .then((result) => {
+        console.log(chalk.bgGreen.black("All Space Fetched"));
+        return resolve(result.rows);
+      })
+      .catch((error) => {
+        console.log(
+          chalk.bgRed.white.bold("error in models/space.js while getting all space")
+        );
+        console.log(error);
+        reject();
+      });
+    });
+  }
 };

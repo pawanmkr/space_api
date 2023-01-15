@@ -1,6 +1,8 @@
 import express from "express";
 import joinSpace from "../controller/joinSpace.js";
 import homePage from "../controller/homePage.js";
+import { User } from "../models/user.js";
+import { Space } from "../models/space.js";
 
 const router = express.Router()
 
@@ -13,10 +15,15 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
 });
 
 router.post('/join/:name', async (req, res) => {
-    await joinSpace(req, res)
-    .then((data) => {
-        console.log(data);
-        res.status(200).json(data);
+    const extractData = await joinSpace(req, res);
+    const activity = await User.memberInSpace(extractData.shareableSpaceId);
+    const allSpace = await Space.getAllSpace();
+    console.log(extractData);
+    console.log(activity);
+    return res.status(200).json({
+        extractData,
+        activity,
+        allSpace
     });
 });
 

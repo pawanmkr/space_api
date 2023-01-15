@@ -11,3 +11,5 @@ for now you can refer to this image to get an idea how to test using thunder cli
 > the server will respond with the following data.
 
 <img width="1440" alt="Screenshot 2023-01-15 at 9 13 42 PM" src="https://user-images.githubusercontent.com/53852047/212551042-a53dd080-c8cb-41ac-b9ba-364232db3b87.png">
+
+if you like the project, consider giving a STAR or maybe contribution from you will also be welcomed :)

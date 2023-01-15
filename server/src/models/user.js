@@ -49,4 +49,18 @@ export class User {
       console.log(error);
     }
   }
+
+  static async memberInSpace(space_id) {
+    try {
+      const member = await pool.query(
+        `SELECT * FROM user_table WHERE space_id=$1`,
+        [space_id]
+      );
+      console.log(chalk.bgGreen.black("Member in space fetched"));
+      return member.rows;
+    } catch (error) {
+      console.log(chalk.bgRed.white.bold("error in models/users.js while fetching member in space"));
+      console.log(error);
+    }
+  }
 };

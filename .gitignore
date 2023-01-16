@@ -7,3 +7,6 @@ client/.DS_Store
 server/.DS_Store
 
 .DS_Store
+
+server/src/.env
+src/.env

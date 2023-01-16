@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import pool from "../config/pool.js";
+import pool from "../config/elephantsql.js";
 import { createUserTable } from "../models/user.js";
 import { createConversationTable } from "../models/conversation.js";
 import { createAttachmentTable } from "../models/attachment.js";

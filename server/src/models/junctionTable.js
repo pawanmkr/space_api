@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import pool from "../config/pool.js";
+import pool from "../config/elephantsql.js";
 
 export class Junction {
   static async createJunctionTable() {

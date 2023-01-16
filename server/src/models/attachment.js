@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import pool from "../config/pool.js";
+import pool from "../config/elephantsql.js";
 
 export async function createAttachmentTable() {
     try {

@@ -15,6 +15,7 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
 });
 
 router.post('/join/:name', async (req, res) => {
+    console.log(req.body)
     const extractData = await joinSpace(req, res);
     const activity = await User.memberInSpace(extractData.shareableSpaceId);
     const allSpace = await Space.getAllSpace();

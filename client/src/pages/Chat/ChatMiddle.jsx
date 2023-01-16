@@ -13,7 +13,7 @@ const ChatMiddle = ({ newSpace }) => {
                 <Message text="Sent Text" author="Pawan Lamar" sender={true} />
             </div>
             <div className="input-box">
-                <form className="d-flex input-form px-3 py-2">
+                <form className="d-flex input-form px-3 py-2" onSubmit={(e) => e.preventDefault()}>
                     <input type="text" className="input-message" placeholder="Type Message Here..." />
                     <button type="submit" className="input-submit-btn"><i className="fa-solid fa-paper-plane"></i></button>
                 </form>

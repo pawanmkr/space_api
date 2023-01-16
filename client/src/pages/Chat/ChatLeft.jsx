@@ -1,7 +1,7 @@
 import Members from "../../components/Members"
 
 
-const ChatLeft = () => {
+const ChatLeft = ({ activity }) => {
     return (
         <div className="chat-left d-flex justify-content-between">
             <div className="chat-left__logo p-3 d-flex flex-column align-items-center justify-content-center">
@@ -35,10 +35,13 @@ const ChatLeft = () => {
                         <p className="online-green-dot">&#x2022;</p>
                     </div>
                     <div className="chat-left__utils_container pt-2 pb-2">
-                        <Members member="Simon Paul" />
+                        {/* <Members member="Simon Paul" />
                         <Members member="Pawan Lamar" />
                         <Members member="Lakshay" />
-                        <Members member="SRD" />
+                        <Members member="SRD" /> */}
+                        {activity && activity.map(act => {
+                            return <Members member={act.username} />
+                        })}
                     </div>
                 </div>
             </div>

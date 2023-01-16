@@ -3,14 +3,14 @@ import ChatMiddle from "./ChatMiddle"
 import ChatRight from "./ChatRight"
 
 
-const Chat = ({ newSpace }) => {
+const Chat = ({ newSpace, activity, allSpaces }) => {
     console.log(newSpace)
 
     return (
         <div className="chat-section d-flex justify-content-between align-items-center">
-            <ChatLeft />
+            <ChatLeft activity={activity}/>
             <ChatMiddle newSpace={newSpace}/>
-            <ChatRight />
+            <ChatRight allSpaces={allSpaces}/>
         </div>
     )
 }

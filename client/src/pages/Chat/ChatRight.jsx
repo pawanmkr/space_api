@@ -1,7 +1,7 @@
 import Room from "../../components/Room"
 import RadioHead from "../../assets/profile.png"
 
-const ChatRight = () => {
+const ChatRight = ({ allSpaces }) => {
   return (
     <div className="chat-right">
       <div className="chat-right__content">
@@ -18,10 +18,13 @@ const ChatRight = () => {
         <div className="chat-right__utils p-2">
 
           <div className="chat-right__utils_container pt-2 pb-2">
-            {/* <Room room="kaale kachhe wale"/> */}
-            <Room room=" Omly Fans no Grills"/>
+            {/* <Room room=" Omly Fans no Grills"/>
             <Room room="Duckbois on the move"/>
             <Room room="blue pegasus: reincarnation"/>
+            <Room room="SM2 these are the breaks."/> */}
+            {allSpaces && allSpaces.map(space => {
+              return <Room room={space.name}/>
+            })}
           </div>
 
 

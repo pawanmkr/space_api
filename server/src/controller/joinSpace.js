@@ -18,8 +18,8 @@ function generateIntUID() {
 
 export default async function joinSpace(req, res) {
     try {
-        const { name } = req.params;
-        const { username } = req.body;
+        const { name } = req.body.name;
+        const { username } = req.body.username;
         const spaceShareId = generateIntUID();
 
         const spaceName = await Socketio.joinNamespace(name);

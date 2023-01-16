@@ -1,9 +1,8 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
-dotenv.config();
 
-const conString = process.env.POSTGRES_URL;
-const pool = new pg.Client(conString);
+var conString = process.env.DATABASE_URL
+var pool = new pg.Client(conString);
 pool.connect(function(err) {
   if(err) {
     return console.error('could not connect to postgres', err);

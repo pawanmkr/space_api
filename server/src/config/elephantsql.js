@@ -1,4 +1,6 @@
 import pg from 'pg';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const conString = process.env.POSTGRES_URL;
 const pool = new pg.Client(conString);

@@ -56,7 +56,6 @@ export class User {
         SELECT id FROM space
           WHERE share_id = '${space_share_id}';
       `);
-      console.log(spaceId)
       const userList =  await pool.query(`
         SELECT username FROM user_table
           JOIN junction_table ON user_table.id = junction_table.user_id

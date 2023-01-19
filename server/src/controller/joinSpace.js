@@ -1,5 +1,9 @@
+import chalk from 'chalk';
 import { Space } from '../models/space.js';
 import { User } from '../models/user.js'; 
+import { Junction } from '../models/junctionTable.js';
+import extractData from '../utils/extractData.js';
+import { Socketio } from '../socketio/socketio.js';
 
 async function ifEmpty(id, user) {
     if (!id || !user) {
@@ -19,9 +23,10 @@ export default async function joinSpace(req, res) {
             res.status(404).json({Message: "there's no such space, check the id again"});
             return;
         }
+        const spaceName = await Socketio.joinNamespace(space.rows[0].name);
         const user = await User.addUser(userName);
-        await Junction.addJunction(user.id, space.id);
-        return extractData(user, space);
+        await Junction.addJunction(user.id, space.rows[0].id);
+        return extractData(user, space.rows[0]);
     } catch (error) {
         console.log(chalk.bgRed.white.bold("error while joining space in server/controller/joinNamespace.js"));
         console.log(error);

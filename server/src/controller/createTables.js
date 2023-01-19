@@ -14,7 +14,7 @@ export default async function createTables() {
     await createConversationTable();
     await createAttachmentTable();
     await Junction.createJunctionTable();
-    console.log(chalk.bgGreen.black("All Tables Created"));
+    console.log(chalk.bgGreen.black("All Tables Created\n"));
   } catch (error) {
     console.log(
       chalk.bgRed.white.bold("error in controller/createTables.js while creating tables")

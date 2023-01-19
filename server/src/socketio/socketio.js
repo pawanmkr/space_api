@@ -1,19 +1,16 @@
-import { Server } from 'socket.io';
-
-export function io(server) {
-    io = new Server(server, {
-        cors: {
-          origin: "http://localhost:4000",
-          methods: ["GET", "POST"]
-        }
-    });
-}
+import chalk from 'chalk';
+import { io } from '../app.js';
 
 export class Socketio {
     static async joinNamespace(name) {
-        const space = await io.of(`/${name}`);
+        const space = io.of(`/${name}`);
         space.on('connection', (socket) => {
-            console.log(`connected in ${spaceName} with id: ${socket.id}`);
+            console.log(chalk.bgWhite.black(`New Connection NameSpace: ${space.name} Socket: ${socket.id}`));
+            
+            socket.on("messageFromClient", (msg) => {
+                console.log(chalk.bgYellow.black(msg));
+                space.emit("messageFromServer", "i got your message, thanks");
+            });
         })
         return space.name.slice(1);
     }

@@ -16,12 +16,9 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
 });
 
 async function spaceHandler(req, res, func) {
-    console.log(req.body)
     const extractData = await func(req, res);
     const activity = await User.findUserbySpace(extractData.shareableSpaceId);
     const allSpace = await Space.getAllSpace();
-    console.log(extractData);
-    console.log(activity);
     return res.status(200).json({
         extractData,
         activity,
@@ -29,8 +26,7 @@ async function spaceHandler(req, res, func) {
     });
 };
 
-router.get('/join/:name', async (req, res) => {
-    console.log("join router");
+router.post('/join/:name', async (req, res) => {
     await spaceHandler(req, res, joinSpace);
 });
 

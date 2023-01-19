@@ -31,12 +31,11 @@ export default async function createSpace(req, res) {
     try {
         const name = req.body.name;
         const username = req.body.username;
-        console.log(req.body.name);
         await ifEmpty(name, username);
         const spaceShareId = generateIntUID();
 
-        const user = await User.addUser(username);
         const spaceName = await Socketio.joinNamespace(name);
+        const user = await User.addUser(username);
         const space = await Space.addSpace(spaceShareId, spaceName);
         await Junction.addJunction(user.id, space.id);
 

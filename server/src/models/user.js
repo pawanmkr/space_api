@@ -8,7 +8,6 @@ export async function createUserTable() {
       CREATE TABLE IF NOT EXISTS user_table (
         id SERIAL PRIMARY KEY,
         username VARCHAR(32) NOT NULL UNIQUE,
-        space_id INTEGER,
         joined_at TIMESTAMP NOT NULL
       );
     `);
@@ -20,7 +19,7 @@ export async function createUserTable() {
 };
 
 export class User {
-  static async addUser(username, space_id) {
+  static async addUser(username) {
     // check if user already exist
     try {
       const checkUser = await pool.query(
@@ -39,8 +38,8 @@ export class User {
     // create if user doesn't exist
     try {
       const user = await pool.query(
-        `INSERT INTO user_table (username, space_id, joined_at) VALUES ($1, $2, $3) RETURNING *`,
-        [username, space_id, new Date()]
+        `INSERT INTO user_table (username, joined_at) VALUES ($1, $2) RETURNING *`,
+        [username, new Date()]
       );
       console.log(chalk.bgGreen.black("User added"));
       return user.rows[0];
@@ -50,11 +49,11 @@ export class User {
     }
   }
 
-  static async memberInSpace(space_id) {
+  static async memberInSpace(space_share_id) {
     try {
       const member = await pool.query(
-        `SELECT * FROM user_table WHERE space_id=$1`,
-        [space_id]
+        `SELECT * FROM user_table WHERE space_share_id=$1`,
+        [space_share_id]
       );
       console.log(chalk.bgGreen.black("Member in space fetched"));
       return member.rows;
@@ -63,4 +62,6 @@ export class User {
       console.log(error);
     }
   }
+
+  static async 
 };

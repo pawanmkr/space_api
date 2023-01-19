@@ -1,4 +1,5 @@
 import express from "express";
+import createSpace from "../controller/createSpace.js";
 import joinSpace from "../controller/joinSpace.js";
 import homePage from "../controller/homePage.js";
 import { User } from "../models/user.js";
@@ -14,9 +15,9 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
     ));
 });
 
-router.post('/join/:name', async (req, res) => {
+async function spaceHandler(req, res, func) {
     console.log(req.body)
-    const extractData = await joinSpace(req, res);
+    const extractData = await func(req, res);
     const activity = await User.memberInSpace(extractData.shareableSpaceId);
     const allSpace = await Space.getAllSpace();
     console.log(extractData);
@@ -26,6 +27,15 @@ router.post('/join/:name', async (req, res) => {
         activity,
         allSpace
     });
+};
+
+router.get('/join/:name', async (req, res) => {
+    console.log("join router");
+    await spaceHandler(req, res, joinSpace);
+});
+
+router.post('/create/:name', async (req, res) => {
+    await spaceHandler(req, res, createSpace);
 });
 
 export default router;

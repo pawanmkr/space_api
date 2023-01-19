@@ -1,32 +1,26 @@
-import chalk from "chalk";
-import crypto from "crypto";
-//import { spaces } from "../socketio/socketio.js";
-import { Socketio } from "../socketio/socketio.js";
-import { Space } from "../models/space.js";
-import { User } from "../models/user.js";
-import { Junction } from "../models/junctionTable.js";
-import { resolve } from "path";
-import extractData from "../utils/extractData.js";
+import { Space } from '../models/space.js';
+import { User } from '../models/user.js'; 
 
-function generateUID() {
-    return crypto.randomBytes(5).toString('hex');
-}
-
-function generateIntUID() {
-    return parseInt(crypto.randomBytes(5).toString('hex'), 16) % Math.pow(10, 6);
-}
+async function ifEmpty(id, user) {
+    if (!id || !user) {
+        console.log(`something is missing: ${id} or ${user}`);
+        throw new Error(`Error: id or user is missing, id: ${id}, user: ${user} cannot be processed`);
+    }    
+};
 
 export default async function joinSpace(req, res) {
+    console.log("enterd join func")
+    const spaceId = req.body.id;
+    const userName = req.body.username;
+    await ifEmpty(spaceId, userName);
     try {
-        const { name } = req.body.name;
-        const { username } = req.body.username;
-        const spaceShareId = generateIntUID();
-
-        const spaceName = await Socketio.joinNamespace(name);
-        const user = await User.addUser(username, spaceShareId);
-        const space = await Space.addSpace(spaceShareId, spaceName, user.id);
+        const space = await Space.findSpacebyId(spaceId);
+        if (!space) {
+            res.status(404).json({Message: "there's no such space, check the id again"});
+            return;
+        }
+        const user = await User.addUser(userName);
         await Junction.addJunction(user.id, space.id);
-
         return extractData(user, space);
     } catch (error) {
         console.log(chalk.bgRed.white.bold("error while joining space in server/controller/joinNamespace.js"));
@@ -38,6 +32,3 @@ export default async function joinSpace(req, res) {
         });
     }
 }
-
-// after writing code ask chatgpt 'how can i improve my code?'
-

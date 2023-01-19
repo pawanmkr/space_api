@@ -6,17 +6,19 @@ export class Junction {
     return new Promise(async (resolve, reject) => {
       pool.query(`
         CREATE TABLE IF NOT EXISTS junction_table (
-          id SERIAL PRIMARY KEY,
+          id SERIAL,
           user_id INTEGER,
           space_id INTEGER,
           conversation_id INTEGER,
           attachment_id INTEGER,
-  
+
+            CONSTRAINT junction_table_pk PRIMARY KEY (user_id, space_id),
+
             FOREIGN KEY (user_id) REFERENCES user_table(id),
             FOREIGN KEY (space_id) REFERENCES space(id),
             FOREIGN KEY (conversation_id) REFERENCES conversation(id),
             FOREIGN KEY (attachment_id) REFERENCES attachment(id)
-        );`
+      );`
       )
       .then(() => {
         console.log(chalk.bgGreen.black("Junction Table Created"));

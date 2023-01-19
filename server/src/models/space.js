@@ -8,8 +8,8 @@ export class Space {
       await pool.query(`
         CREATE TABLE IF NOT EXISTS space (
           id SERIAL PRIMARY KEY,
+          share_id VARCHAR(6) NOT NULL,
           name VARCHAR(64) NOT NULL,
-          user_id INTEGER NOT NULL,
           capacity INTEGER DEFAULT 100,
           created_at TIMESTAMP NOT NULL
         );`
@@ -23,11 +23,11 @@ export class Space {
     }
   };
 
-  static async addSpace(space_id, space_name, user_id, space_metadata) {
+  static async addSpace(space_share_id, space_name) {
     return new Promise(async (resolve, reject) => {
       await pool.query(`
-        INSERT INTO space (id, name, user_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *;`,
-        [space_id, space_name, user_id, new Date()])
+        INSERT INTO space (share_id, name, created_at) VALUES ($1, $2, $3) RETURNING *;`,
+        [space_share_id, space_name, new Date()])
       .then((result) => {
         console.log(chalk.bgGreen.black("Space Added"));
         return resolve(result.rows[0]);
@@ -58,5 +58,18 @@ export class Space {
         reject();
       });
     });
+  }
+
+  static async findSpacebyId(space_share_id) {
+    try {
+      return await pool.query(
+        `SELECT * FROM space WHERE share_id = '${space_share_id}';`
+      );
+    } catch (error) {
+      console.log(
+        chalk.bgRed.white.bold("error in models/space.js while getting all space")
+      );
+      console.log(error);
+    }
   }
 };

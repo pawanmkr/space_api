@@ -37,9 +37,10 @@ export class User {
 
     // create if user doesn't exist
     try {
-      const user = await pool.query(
-        `INSERT INTO user_table (username, joined_at) VALUES ($1, $2) RETURNING *`,
-        [username, new Date()]
+      const user = await pool.query(`
+      INSERT INTO user_table (username, joined_at)
+          VALUES ($1, $2) RETURNING *
+        `,[username, new Date()]
       );
       console.log(chalk.bgGreen.black("User added"));
       return user.rows[0];
@@ -49,19 +50,22 @@ export class User {
     }
   }
 
-  static async memberInSpace(space_share_id) {
+  static async findUserbySpace(space_share_id) {
     try {
-      const member = await pool.query(
-        `SELECT * FROM user_table WHERE space_share_id=$1`,
-        [space_share_id]
-      );
-      console.log(chalk.bgGreen.black("Member in space fetched"));
-      return member.rows;
+      const spaceId = await pool.query(`
+        SELECT id FROM space
+          WHERE share_id = '${space_share_id}';
+      `);
+      console.log(spaceId)
+      const userList =  await pool.query(`
+        SELECT username FROM user_table
+          JOIN junction_table ON user_table.id = junction_table.user_id
+          WHERE junction_table.space_id = ${spaceId.rows[0].id};
+      `);
+      return userList.rows;
     } catch (error) {
-      console.log(chalk.bgRed.white.bold("error in models/users.js while fetching member in space"));
+      console.log(chalk.bgRed.white.bold("error in models/users.js while findind user by space id"));
       console.log(error);
     }
   }
-
-  static async 
 };

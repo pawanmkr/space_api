@@ -18,7 +18,7 @@ router.get('/loaderio-0322896b81b856472cf240f5e4a889ad', (req, res) => {
 async function spaceHandler(req, res, func) {
     console.log(req.body)
     const extractData = await func(req, res);
-    const activity = await User.memberInSpace(extractData.shareableSpaceId);
+    const activity = await User.findUserbySpace(extractData.shareableSpaceId);
     const allSpace = await Space.getAllSpace();
     console.log(extractData);
     console.log(activity);

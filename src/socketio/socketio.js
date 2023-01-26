@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import formatMessage from '../utils/formatMessage.js';
 import { io } from '../app.js';
 
 export class Socketio {
@@ -9,7 +10,7 @@ export class Socketio {
             
             socket.on("messageFromClient", (msg) => {
                 console.log(chalk.bgYellow.black(msg));
-                space.emit("messageFromServer", msg);
+                space.emit("messageFromServer", formatMessage(msg));
             });
         })
         return space.name.slice(1);

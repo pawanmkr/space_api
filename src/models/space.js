@@ -26,7 +26,8 @@ export class Space {
   static async addSpace(space_share_id, space_name) {
     return new Promise(async (resolve, reject) => {
       await pool.query(`
-        INSERT INTO space (share_id, name, created_at) VALUES ($1, $2, $3) RETURNING *;`,
+        INSERT INTO space (share_id, name, created_at)
+          VALUES ($1, $2, $3) RETURNING *;`,
         [space_share_id, space_name, new Date()])
       .then((result) => {
         console.log(chalk.bgGreen.black("Space Added"));
@@ -68,6 +69,23 @@ export class Space {
     } catch (error) {
       console.log(
         chalk.bgRed.white.bold("error in models/space.js while getting all space")
+      );
+      console.log(error);
+    }
+  }
+
+  static async findSpacebyUserId(user_id) {
+    try {
+      const data = await pool.query(`
+      SELECT * FROM space 
+        JOIN junction_table 
+          ON junction_table.space_id = space.id 
+        WHERE junction_table.user_id = ($1);`,[user_id]
+      );
+      return data.rows;
+    } catch (error) {
+      console.log(
+        chalk.bgRed.white.bold("error in models/space.js while finding spaces by user id")
       );
       console.log(error);
     }

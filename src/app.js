@@ -31,10 +31,30 @@ app.use(cors({
 }))
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+// todo: if no error, remove this line
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(pathToPublicFolder));
 
-createTables();
+// body-parser middleware replaed by express.urlencoded
+app.use((req, res, next) => {
+    if (req.method === 'POST' || req.method === 'PUT') {
+        app.use(express.urlencoded({ extended: true }));
+    }
+    next();
+});
+
+let retryCount = 5;
+while (retryCount) {
+    try {
+        await createTables();
+        break;
+    } catch (error) {
+        console.log(error);
+        console.log(chalk.red(`Retrying to connect with database... ${retryCount} remaining`));
+        retryCount--;
+        await new Promise(res => setTimeout(res, 5000)); 
+    }
+}
 
 app.use('/', socketRoutes);
 

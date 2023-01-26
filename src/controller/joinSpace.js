@@ -13,7 +13,6 @@ async function ifEmpty(id, user) {
 };
 
 export default async function joinSpace(req, res) {
-    console.log("enterd join func")
     const spaceId = req.body.id;
     const userName = req.body.username;
     await ifEmpty(spaceId, userName);

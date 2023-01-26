@@ -11,6 +11,7 @@ export async function createUserTable() {
         joined_at TIMESTAMP NOT NULL
       );
     `);
+    /* todo: in this query the column joined_at should be on junction table */
     console.log(chalk.bgGreen.black("User table created"));
   } catch (error) {
     console.log("error in models/users.js while creating user table");

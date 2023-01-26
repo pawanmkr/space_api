@@ -10,3 +10,4 @@ server/.DS_Store
 
 server/src/.env
 src/.env
+node_modules

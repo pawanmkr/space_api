@@ -9,7 +9,7 @@ export class Socketio {
             
             socket.on("messageFromClient", (msg) => {
                 console.log(chalk.bgYellow.black(msg));
-                space.emit("messageFromServer", "i got your message, thanks");
+                space.emit("messageFromServer", msg);
             });
         })
         return space.name.slice(1);

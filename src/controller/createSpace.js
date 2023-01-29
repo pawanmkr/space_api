@@ -3,7 +3,7 @@ import crypto from "crypto";
 //import { spaces } from "../socketio/socketio.js";
 import { Socketio } from "../socketio/socketio.js";
 import { Space } from "../models/space.js";
-import { User } from "../models/user.js";
+import User from "../models/user.js";
 import { Junction } from "../models/junctionTable.js";
 import { resolve } from "path";
 import extractData from "../utils/extractData.js";

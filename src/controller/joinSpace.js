@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Space } from '../models/space.js';
-import { User } from '../models/user.js'; 
+import User from '../models/user.js'; 
 import { Junction } from '../models/junctionTable.js';
 import extractData from '../utils/extractData.js';
 import { Socketio } from '../socketio/socketio.js';

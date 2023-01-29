@@ -62,13 +62,4 @@ app.use('/namespace', socketRoutes);
 
 server.listen(process.env.PORT || 4000, () => {
     console.log(`Server's up & running on http://localhost:4000/`);
-})
-
-import formatMessage from "./utils/formatMessage.js";
-
-console.log(
-    formatMessage({
-        message: 'Hello World',
-        username: 'simonpaul'
-    })
-);
+});

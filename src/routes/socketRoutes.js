@@ -2,7 +2,7 @@ import express from "express";
 import createSpace from "../controller/createSpace.js";
 import joinSpace from "../controller/joinSpace.js";
 import homePage from "../controller/homePage.js";
-import { User } from "../models/user.js";
+import User from "../models/user.js";
 import { Space } from "../models/space.js";
 
 const router = express.Router()

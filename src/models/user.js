@@ -2,24 +2,24 @@ import chalk from 'chalk';
 import pool from "../config/elephantsql.js";
 import { Junction } from './junctionTable.js';
 
-export async function createUserTable() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS user_table (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(32) NOT NULL UNIQUE,
-        joined_at TIMESTAMP NOT NULL
-      );
-    `);
-    /* todo: in this query the column joined_at should be on junction table */
-    console.log(chalk.bgGreen.black("User table created"));
-  } catch (error) {
-    console.log("error in models/users.js while creating user table");
-    console.log(chalk.bgRed.white.bold(`ERROR >>> ${error}`));
-  }
-};
+export default class User {
+  static async createUserTable() {
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS user_table (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(32) NOT NULL UNIQUE,
+          joined_at TIMESTAMP NOT NULL
+        );
+      `);
+      /* todo: in this query the column joined_at should be on junction table */
+      console.log(chalk.bgGreen.black("User table created"));
+    } catch (error) {
+      console.log("error in models/users.js while creating user table");
+      console.log(chalk.bgRed.white.bold(`ERROR >>> ${error}`));
+    }
+  };
 
-export class User {
   static async addUser(username) {
     // check if user already exist
     try {
@@ -68,4 +68,21 @@ export class User {
       console.log(error);
     }
   }
+
+  static async findUserbyUsername(username) {
+    try {
+      const userId = await pool.query(`SELECT id FROM user_table WHERE username = $1`, [username]);
+      console.log(userId.rows[0].id);
+      //this.freeze(2);
+      return userId.rows[0].id;
+    } catch (error) {
+      console.log(chalk.bgRed.white.bold("error in models/users.js while finding user by username"));
+      console.log(error);
+    }
+  }
+
+  static async freeze(secs) { 
+    var waituntil = performance.now() + secs*1000; 
+    while(performance.now() < waituntil); 
+  } 
 };

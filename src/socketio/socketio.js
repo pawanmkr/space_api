@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 import formatMessage from '../utils/formatMessage.js';
 import { io } from '../app.js';
+import User from '../models/user.js'
+import Conversation from '../models/conversation.js'
 
 export class Socketio {
     static async joinNamespace(name) {
@@ -8,14 +10,18 @@ export class Socketio {
         space.on('connection', (socket) => {
             console.log(chalk.bgWhite.black(`New Connection NameSpace: ${space.name} Socket: ${socket.id}`));
             
-            socket.on("messageFromClient", (msg) => {
-                console.log(chalk.bgYellow.black(msg));
-                space.emit("messageFromServer", formatMessage(msg));
+            socket.on("messageFromClient", async (msg) => {
+                const userId = await User.findUserbyUsername(msg.username);
+                const addMessage = await Conversation.addMessage(msg.spaceId, userId, msg.message);
+                space.emit("messageFromServer", formatMessage(addMessage));
             });
         })
         return space.name.slice(1);
     }
 };
+
+
+
 
 
 

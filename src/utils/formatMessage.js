@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 
-export default function formatMessage(msg) {
+export default async function formatMessage(savedMessage, msg) {
     return {
-        message: msg.message,
+        message: savedMessage.message,
         username: msg.username,
-        attachment: msg.attachment
+        attachment: savedMessage.attachment
     }
 }

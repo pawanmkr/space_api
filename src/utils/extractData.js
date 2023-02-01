@@ -1,4 +1,4 @@
-export default function extractData(user, space) {
+export default async function extractData(user, space, chatHistory) {
     return {
         userId: user.id,
         userName: user.username,
@@ -7,5 +7,6 @@ export default function extractData(user, space) {
         spaceName: space.name,
         spaceCreatedAt: space.created_at,
         spaceMaxCapacity: space.capacity,
+        chats: chatHistory
     };
 }

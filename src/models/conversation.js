@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import pool from "../config/elephantsql.js";
+import User from "./user.js";
 //import Attachment from '../models/attachment.js';
 
 export default class Conversation {
@@ -53,22 +54,29 @@ export default class Conversation {
         }
     }
 
-    static async loadChatsbySpaceId(spaceId, userId, message) {
+    static async loadChatsbySpaceId(spaceId) {
         try {
             const msg = await pool.query(`
-                INSERT INTO conversation (space_id, user_id, message) VALUES ($1, $2, $3) RETURNING *`, 
-                [spaceId, userId, message]
+                SELECT * FROM conversation WHERE space_id = $1 ORDER BY created_at`, 
+                [spaceId]
             );
             let attachment = null;
             /* if (msg.rows[0].attachment) {
                 attachment = await Attachment.getAttachmentbyId(msg.rows[0].attachment);
             } */
-            return {
-                message: msg.rows[0].message,
-                attachment: attachment
-            };
+            console.log(msg.rows);
+            const chats = msg.rows.map(async message => {
+                return {
+                  username: await User.findUsernamebyId(message.user_id),
+                  created_at: message.created_at,
+                  message: message.message
+                }
+            });
+            const chatHistory = await Promise.all(chats);
+            console.log(chatHistory);
+            return chatHistory;
         } catch (error) {
-            console.log(chalk.bgRed.white.bold("error in models/conversation.js while adding message"));
+            console.log(chalk.bgRed.white.bold("error in models/conversation.js while loading chats"));
             console.log(error);
         }
     }    

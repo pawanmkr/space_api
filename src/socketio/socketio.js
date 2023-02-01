@@ -13,7 +13,8 @@ export class Socketio {
             socket.on("messageFromClient", async (msg) => {
                 const userId = await User.findUserbyUsername(msg.username);
                 const addMessage = await Conversation.addMessage(msg.spaceId, userId, msg.message);
-                space.emit("messageFromServer", formatMessage(addMessage));
+                const message = await formatMessage(addMessage, msg);
+                space.emit("messageFromServer", msg);
             });
         })
         return space.name.slice(1);

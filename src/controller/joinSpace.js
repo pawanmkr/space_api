@@ -4,6 +4,7 @@ import User from '../models/user.js';
 import { Junction } from '../models/junctionTable.js';
 import extractData from '../utils/extractData.js';
 import { Socketio } from '../socketio/socketio.js';
+import Conversation from '../models/conversation.js'
 
 async function ifEmpty(id, user) {
     if (!id || !user) {
@@ -25,7 +26,9 @@ export default async function joinSpace(req, res) {
         const spaceName = await Socketio.joinNamespace(space.rows[0].name);
         const user = await User.addUser(userName);
         await Junction.addJunction(user.id, space.rows[0].id);
-        return extractData(user, space.rows[0]);
+        const chatHistory = await Conversation.loadChatsbySpaceId(spaceId);
+        console.log(chatHistory)
+        return extractData(user, space.rows[0], chatHistory);
     } catch (error) {
         console.log(chalk.bgRed.white.bold("error while joining space in server/controller/joinNamespace.js"));
         console.log(error);

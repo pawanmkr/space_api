@@ -81,6 +81,19 @@ export default class User {
     }
   }
 
+  static async findUsernamebyId(id) {
+    try {
+      let username = await pool.query(`SELECT username FROM user_table WHERE id = $1`, [id]);
+      username = username.rows[0].username;
+      console.log(username);
+      //this.freeze(2);
+      return username;
+    } catch (error) {
+      console.log(chalk.bgRed.white.bold("error in models/users.js while finding username"));
+      console.log(error);
+    }
+  }
+
   static async freeze(secs) { 
     var waituntil = performance.now() + secs*1000; 
     while(performance.now() < waituntil); 

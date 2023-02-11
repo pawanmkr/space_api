@@ -72,7 +72,6 @@ export default class User {
   static async findUserbyUsername(username) {
     try {
       const userId = await pool.query(`SELECT id FROM user_table WHERE username = $1`, [username]);
-      console.log(userId.rows[0].id);
       //this.freeze(2);
       return userId.rows[0].id;
     } catch (error) {

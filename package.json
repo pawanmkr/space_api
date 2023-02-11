@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "aws-sdk": "^2.1313.0",
     "chalk": "^5.2.0",
+    "config": "^3.3.9",
     "cors": "^2.8.5",
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",

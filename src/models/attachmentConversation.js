@@ -7,7 +7,7 @@ export async function createAttachmentConversationMapTable() {
             CREATE TABLE IF NOT EXISTS attachment_conversation_map (
                 id SERIAL PRIMARY KEY,
                 conversation_id INTEGER,
-                attachment_id INTEGER,
+                attachment_id VARCHAR(10),
 
                     FOREIGN KEY (conversation_id) REFERENCES conversation(id),
                     FOREIGN KEY (attachment_id) REFERENCES attachment(id)

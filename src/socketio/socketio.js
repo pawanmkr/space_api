@@ -4,6 +4,8 @@ import { io } from '../app.js';
 import User from '../models/user.js'
 import Conversation from '../models/conversation.js'
 import Attachment from '../models/attachment.js'
+import { savetoS3 } from '../config/s3.js';
+import handleError from '../utils/handleError.js';
 
 export class Socketio {
     static async joinNamespace(name) {
@@ -29,12 +31,17 @@ export class Socketio {
             } */
             socket.on("fileFromClient", async (file) => {
                 try {
-                    console.log(file)
-                    const url = await savetoS3(file.actualFile)
-                    const fileData = await Attachment.addAttachment(file, url)
-                    const userId = await User.findUserbyUsername(file.username);
-                    await Conversation.addMessage(file.spaceId, userId, null, fileData.rows[0].url)
-                    space.emit("fileFromServer", fileData)
+                    const uploadedFile = await savetoS3(file)
+                    const attachment = await Attachment.addAttachment(file, uploadedFile)
+                    const userId = await User.findUserbyUsername(file.sender);
+                    await Conversation.addMessage(file.space, userId, null, attachment.rows[0].id)
+                    
+                    const attachmentDetailsForClient = {
+                        id: attachment.rows[0].id,  name: attachment.rows[0].name,
+                        type: attachment.rows[0].type, size: attachment.rows[0].size
+                    }
+                    console.log(attachmentDetailsForClient)
+                    space.emit("fileFromServer", attachmentDetailsForClient) // emit attachment details after saving on server
                 } catch (error) {
                     handleError(error, "failed sending file back to client in socketio/socketio.js")
                 }
@@ -42,7 +49,7 @@ export class Socketio {
         })
         return space.name.slice(1);
     }
-};
+}
 
 
 

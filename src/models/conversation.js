@@ -2,6 +2,7 @@ import chalk from "chalk";
 import pool from "../config/pool.js";
 import User from "./user.js";
 //import Attachment from '../models/attachment.js';
+import handleError from "../utils/handleError.js";
 
 export default class Conversation {
     static async createConversationTable() {
@@ -12,8 +13,8 @@ export default class Conversation {
                     space_id INTEGER NOT NULL,
                     user_id INTEGER NOT NULL,
                     created_at TIMESTAMP NOT NULL,
-                    message VARCHAR(256),
-                    attachment_id INTEGER,
+                    message VARCHAR(4096),
+                    attachment_id VARCHAR(10),
                     CHECK (message IS NOT NULL OR attachment_id IS NOT NULL),
                     
                     FOREIGN KEY (attachment_id) REFERENCES attachment(id)
@@ -33,36 +34,19 @@ export default class Conversation {
         });
     };
 
-    static async addMessage(spaceId, userId, message, attachment) {
+    static async addMessage(spaceId, userId, message, attachmentId) {
         try {
-            let msg;
-            if (attachment) {
-                msg = await pool.query(`
+            if (attachmentId) { // if there is only attachment then do this
+                await pool.query(`
                     INSERT INTO conversation (space_id, user_id, created_at, attachment_id) VALUES ($1, $2, $3, $4) RETURNING *`, 
-                    [spaceId, userId, new Date(), attachment] 
-                );
-                console.log({
-                    message: msg.rows[0].message,
-                    attachment: attachment
-                });
-                return {
-                    message: msg.rows[0].message,
-                    attachment: attachment
-                };
-            } else {
-                msg = await pool.query(`
+                    [spaceId, userId, new Date(), attachmentId] 
+                )
+            } else { // when there is only text-message
+                await pool.query(`
                     INSERT INTO conversation (space_id, user_id, message, created_at) VALUES ($1, $2, $3, $4) RETURNING *`, 
                     [spaceId, userId, message, new Date()] 
-                );
-                console.log({
-                    message: msg.rows[0].message,
-                    attachment: attachment
-                });
-                return {
-                    message: msg.rows[0].message,
-                    attachment: attachment
-                };
-            };
+                )
+            }
         } catch (error) {
             handleError(error, "failed adding msg in models/conversation.js")
         }

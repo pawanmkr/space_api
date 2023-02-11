@@ -10,7 +10,7 @@ export class Junction {
           user_id INTEGER,
           space_id INTEGER,
           conversation_id INTEGER,
-          attachment_id INTEGER,
+          attachment_id VARCHAR(10),
 
             CONSTRAINT junction_table_pk PRIMARY KEY (user_id, space_id),
 

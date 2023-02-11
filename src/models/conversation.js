@@ -42,11 +42,10 @@ export default class Conversation {
                     [spaceId, userId, new Date(), attachmentId] 
                 )
             } else { // when there is only text-message
-                let msg = await pool.query(`
+                await pool.query(`
                     INSERT INTO conversation (space_id, user_id, message, created_at) VALUES ($1, $2, $3, $4) RETURNING *`, 
                     [spaceId, userId, message, new Date()] 
                 )
-                return msg.rows[0].message;
             }
         } catch (error) {
             handleError(error, "failed adding msg in models/conversation.js")

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import pool from "../config/elephantsql.js";
+import pool from "../config/pool.js";
 import User from "./user.js";
 //import Attachment from '../models/attachment.js';
 
@@ -12,8 +12,11 @@ export default class Conversation {
                     space_id INTEGER NOT NULL,
                     user_id INTEGER NOT NULL,
                     created_at TIMESTAMP NOT NULL,
-                    message VARCHAR(256) NOT NULL,
-                    attachment INTEGER DEFAULT NULL
+                    message VARCHAR(256),
+                    attachment_id INTEGER,
+                    CHECK (message IS NOT NULL OR attachment_id IS NOT NULL),
+                    
+                    FOREIGN KEY (attachment_id) REFERENCES attachment(id)
                 );`
             )
             .then(() => {
@@ -30,29 +33,40 @@ export default class Conversation {
         });
     };
 
-    static async addMessage(spaceId, userId, message) {
+    static async addMessage(spaceId, userId, message, attachment) {
         try {
-            const msg = await pool.query(`
-                INSERT INTO conversation (space_id, user_id, message, created_at) VALUES ($1, $2, $3, $4) RETURNING *`, 
-                [spaceId, userId, message, new Date()]
-            );
-            let attachment = null;
-            /* if (msg.rows[0].attachment) {
-                attachment = await Attachment.getAttachmentbyId(msg.rows[0].attachment);
-            } */
-            console.log({
-                message: msg.rows[0].message,
-                attachment: attachment
-            });
-            return {
-                message: msg.rows[0].message,
-                attachment: attachment
+            let msg;
+            if (attachment) {
+                msg = await pool.query(`
+                    INSERT INTO conversation (space_id, user_id, created_at, attachment_id) VALUES ($1, $2, $3, $4) RETURNING *`, 
+                    [spaceId, userId, new Date(), attachment] 
+                );
+                console.log({
+                    message: msg.rows[0].message,
+                    attachment: attachment
+                });
+                return {
+                    message: msg.rows[0].message,
+                    attachment: attachment
+                };
+            } else {
+                msg = await pool.query(`
+                    INSERT INTO conversation (space_id, user_id, message, created_at) VALUES ($1, $2, $3, $4) RETURNING *`, 
+                    [spaceId, userId, message, new Date()] 
+                );
+                console.log({
+                    message: msg.rows[0].message,
+                    attachment: attachment
+                });
+                return {
+                    message: msg.rows[0].message,
+                    attachment: attachment
+                };
             };
         } catch (error) {
-            console.log(chalk.bgRed.white.bold("error in models/conversation.js while adding message"));
-            console.log(error);
+            handleError(error, "failed adding msg in models/conversation.js")
         }
-    }
+    };
 
     static async loadChatsbySpaceId(spaceId) {
         try {
@@ -79,5 +93,5 @@ export default class Conversation {
             console.log(chalk.bgRed.white.bold("error in models/conversation.js while loading chats"));
             console.log(error);
         }
-    }    
-}
+    };    
+};

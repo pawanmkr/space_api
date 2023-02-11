@@ -3,6 +3,7 @@ import formatMessage from '../utils/formatMessage.js';
 import { io } from '../app.js';
 import User from '../models/user.js'
 import Conversation from '../models/conversation.js'
+import Attachment from '../models/attachment.js'
 
 export class Socketio {
     static async joinNamespace(name) {
@@ -12,10 +13,32 @@ export class Socketio {
             
             socket.on("messageFromClient", async (msg) => {
                 const userId = await User.findUserbyUsername(msg.username);
-                const addMessage = await Conversation.addMessage(msg.spaceId, userId, msg.message);
+                const addMessage = await Conversation.addMessage(msg.spaceId, userId, msg.message, null);
                 const message = await formatMessage(addMessage, msg);
                 space.emit("messageFromServer", msg);
             });
+
+            /* file: {
+                actualFile: dna.mp3,
+                name: "dna",
+                format: "mp3",
+                size: 100mb,
+                ----------------
+                sender: username,
+                space: spaceId
+            } */
+            socket.on("fileFromClient", async (file) => {
+                try {
+                    console.log(file)
+                    const url = await savetoS3(file.actualFile)
+                    const fileData = await Attachment.addAttachment(file, url)
+                    const userId = await User.findUserbyUsername(file.username);
+                    await Conversation.addMessage(file.spaceId, userId, null, fileData.rows[0].url)
+                    space.emit("fileFromServer", fileData)
+                } catch (error) {
+                    handleError(error, "failed sending file back to client in socketio/socketio.js")
+                }
+            })
         })
         return space.name.slice(1);
     }

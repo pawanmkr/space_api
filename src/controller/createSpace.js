@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import crypto from "crypto";
-//import { spaces } from "../socketio/socketio.js";
 import { Socketio } from "../socketio/socketio.js";
 import { Space } from "../models/space.js";
 import User from "../models/user.js";

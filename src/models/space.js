@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import pool from "../config/elephantsql.js";
+import pool from "../config/pool.js";
 
 
 export class Space {

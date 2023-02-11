@@ -1,4 +1,4 @@
-import pool from "../config/elephantsql.js";
+import pool from "../config/pool.js";
 
 export default async function addForeignKey() {
     pool.query(`

@@ -40,11 +40,13 @@ CREATE TABLE IF NOT EXISTS attachment (
 
 
 CREATE TABLE IF NOT EXISTS junction_table (
-          id SERIAL PRIMARY KEY,
+          id SERIAL,
           user_id INTEGER,
           space_id INTEGER,
           conversation_id INTEGER,
           attachment_id INTEGER,
+
+            ADD CONSTRAINT junction_table_pk PRIMARY KEY (user_id, space_id),
   
             FOREIGN KEY (user_id) REFERENCES user_table(id),
             FOREIGN KEY (space_id) REFERENCES space(id),
@@ -63,3 +65,4 @@ INSERT INTO space (id, name, user_id, created_at, metadata) VALUES ($1, $2, $3, 
 
 -- insert into junction_table
 INSERT INTO junction_table (user_id, space_id) VALUES($1, $2) RETURNING *;
+

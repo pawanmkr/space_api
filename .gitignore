@@ -5,5 +5,9 @@ client/node_modules
 client/package-lock.json
 client/.DS_Store
 server/.DS_Store
-
+.env
 .DS_Store
+
+server/src/.env
+src/.env
+node_modules

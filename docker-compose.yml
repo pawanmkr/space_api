@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    environment: 
+      -e POSTGRES_USER: postgres
+      -e POSTGRES_PASSWORD: mint
+      -e POSTGRES_DB: spaces
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '8080:8080'
+  web:
+    image: pawanmkr/  spaces
+    depends_on:
+      - db
+    ports:
+      - "4000:4000"

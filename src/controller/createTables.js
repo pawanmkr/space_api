@@ -4,7 +4,6 @@ import User from "../models/user.js";
 import Conversation from "../models/conversation.js";
 import Attachment from "../models/attachment.js";
 import { Junction } from "../models/junctionTable.js";
-import { createAttachmentConversationMapTable } from "../models/attachmentConversation.js";
 import { Space } from "../models/space.js";
 
 export default async function createTables() {

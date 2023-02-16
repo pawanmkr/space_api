@@ -17,13 +17,21 @@ export default async function joinSpace(req, res) {
     const spaceId = req.body.id;
     const userName = req.body.username;
     await ifEmpty(spaceId, userName);
+
+    // getting data from query
+    if (req.query) {
+        spaceId = req.query.id
+        userName = req.query.username
+        await ifEmpty(spaceId, userName);
+    }
     try {
         const space = await Space.findSpacebyId(spaceId);
         if (!space) {
             res.status(404).json({Message: "there's no such space, check the id again"});
             return;
         }
-        const spaceName = await Socketio.joinNamespace(space.rows[0].name);
+        // const spaceName = await Socketio.joinNamespace(space.rows[0].name);
+        await Socketio.joinNamespace(space.rows[0].name)
         const user = await User.addUser(userName);
         await Junction.addJunction(user.id, space.rows[0].id);
         const chatHistory = await Conversation.loadChatsbySpaceId(spaceId);

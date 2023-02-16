@@ -4,7 +4,7 @@ import { io } from '../app.js';
 import User from '../models/user.js'
 import Conversation from '../models/conversation.js'
 import Attachment from '../models/attachment.js'
-import { savetoS3 } from '../config/s3.js';
+import { savetoS3 } from '../controller/handleS3.js';
 import handleError from '../utils/handleError.js';
 
 export class Socketio {

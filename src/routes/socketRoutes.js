@@ -1,8 +1,11 @@
 import express from "express";
+import url from 'url'
+
 import createSpace from "../controller/createSpace.js";
 import joinSpace from "../controller/joinSpace.js";
 import User from "../models/user.js";
 import { Space } from "../models/space.js";
+import { downloadAttachment } from "../controller/downloadAttachment.js";
 
 const router = express.Router()
 
@@ -22,6 +25,16 @@ async function spaceHandler(req, res, func) {
         allSpace
     });
 };
+
+// handleDownloads
+router.get('/:attachmentId', async (req, res) => {
+    const start = performance.now()
+    const file = await downloadAttachment(req, res)
+    const end = performance.now()
+    console.log(end-start)
+    res.send(file)
+    res.status(200)
+})
 
 router.post('/join/:name', async (req, res) => {
     await spaceHandler(req, res, joinSpace);

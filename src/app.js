@@ -59,6 +59,14 @@ while (retryCount) {
     }
 }
 
+// if someone want to check if the server is running or  not
+// just make a get request on this route
+app.get("/health", (req, res) => {
+    res.send({
+        status: "alive"
+    })
+})
+
 app.use('/', socketRoutes);
 
 app.use('/namespace', socketRoutes);

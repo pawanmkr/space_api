@@ -19,11 +19,11 @@ export default async function joinSpace(req, res) {
     await ifEmpty(spaceId, userName);
 
     // getting data from query
-    if (req.query) {
+    /* if (req.query) {
         spaceId = req.query.id
         userName = req.query.username
         await ifEmpty(spaceId, userName);
-    }
+    } */
     try {
         const space = await Space.findSpacebyId(spaceId);
         if (!space) {

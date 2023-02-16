@@ -28,10 +28,7 @@ async function spaceHandler(req, res, func) {
 
 // handleDownloads
 router.get('/:attachmentId', async (req, res) => {
-    const start = performance.now()
     const file = await downloadAttachment(req, res)
-    const end = performance.now()
-    console.log(end-start)
     res.send(file)
     res.status(200)
 })

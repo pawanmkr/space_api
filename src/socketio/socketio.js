@@ -8,11 +8,16 @@ import { savetoS3 } from '../controller/handleS3.js';
 import handleError from '../utils/handleError.js';
 
 export class Socketio {
-    static async joinNamespace(name) {
+    static async joinNamespace(name, username) {
         const space = io.of(`/${name}`);
         space.on('connection', (socket) => {
             console.log(chalk.bgWhite.black(`New Connection NameSpace: ${space.name} Socket: ${socket.id}`));
             
+            // currently working here
+            space.emit('newUserAdded', username, () => {
+                console.log(username)
+            })
+
             socket.on("messageFromClient", async (msg) => {
                 const userId = await User.findUserbyUsername(msg.username);
                 const addMessage = await Conversation.addMessage(msg.spaceId, userId, msg.message, null);
